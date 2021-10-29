@@ -1,13 +1,18 @@
 lucasL -- 2021-10-27 21:00
-
 - Finished up the first iteration of the design document
 - Assigned tentative roles for the group
 
 lucasL -- 2021-10-28 19:30
-
 - Implemented feedback from today's review
 - Added visual sitemap
 - Inserted tables for database information
 
 oscarW -- 2021-10-29 00:00
 - Drafted page designs for homepage and story pages
+
+owenY -- 2021-10-29 08:00
+- set up github
+
+lucasL -- 2021-10-29 08:00
+- set up github
+- created static files
