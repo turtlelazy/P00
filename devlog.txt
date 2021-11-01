@@ -10,10 +10,13 @@ lucasL -- 2021-10-28 19:30
 oscarW -- 2021-10-29 00:00
 - Drafted page designs for homepage and story pages
 
-lucasL -- 2021-10-29 08:00
+lucasL, owenY -- 2021-10-29 08:00
 - set up github
 - created static files
 - workingish site up and running
+
+aryamanG -- 2021-11-1 8:00
+- created SQLite Databases
 
 oscarW -- 2021-11-1 08:30
 - added HTML files for login and register
