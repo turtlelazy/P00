@@ -14,3 +14,6 @@ lucasL -- 2021-10-29 08:00
 - set up github
 - created static files
 - workingish site up and running
+
+oscarW -- 2021-11-1
+- added HTML files for login and register
