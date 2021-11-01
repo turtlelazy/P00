@@ -15,5 +15,9 @@ lucasL -- 2021-10-29 08:00
 - created static files
 - workingish site up and running
 
-oscarW -- 2021-11-1
+oscarW -- 2021-11-1 08:30
 - added HTML files for login and register
+
+lucasL -- 2021-11-1 08:30
+- created dynamic app routing for story pages
+- basic routing for login, register, creating stories, 404 error
