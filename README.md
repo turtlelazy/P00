@@ -11,5 +11,6 @@ Community-based storytelling project in which a user can register for an account
 
 #### Set-up
 1. Clone this repo using `git clone https://github.com/Lucas-Lee11/P00`
-2. Run the app via `cd P00/app && python app.py`
-3. Visit site at `localhost: 5000`
+2. Install required modules using `pip install -r requirement.txt`
+2. Run the app via `cd P00/app && python __init__.py`
+3. Visit site at `localhost: 5000` in your web browser!

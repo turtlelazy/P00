@@ -24,3 +24,10 @@ oscarW -- 2021-11-1 08:30
 lucasL -- 2021-11-1 08:30
 - created dynamic app routing for story pages
 - basic routing for login, register, creating stories, 404 error
+
+lucasL -- 2021-11-2 19:00
+- created temporary username and password to get login up and running
+- got login/logout functionality and forms working
+- created basic 404 page
+- updated readme launchcodes
+- moved main app to __init__.py
