@@ -137,14 +137,6 @@ def add_story():
 def not_found(e):
     return render_template('404.html'), 404
 
-<<<<<<< HEAD
-=======
-# Utility function to check if there is a session
-def logged_in():
-    return session.get('username') is not None
-
-
->>>>>>> 966713f29632f52b12d27ca275d57d0292f4bd5b
 if __name__ == '__main__':
     app.debug = True
     app.run()
