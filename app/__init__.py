@@ -102,11 +102,13 @@ def register():
             error = True
             errormsg = "Error: Passwords do not match!"
             return render_template("register.html", error=error, errmsg=errormsg)
-        #else:
-        
-        # sqlite stuff checking for username already exists
+        else:
+            # sqlite stuff checking for username already exists
 
-        # sqlite stuff for submitting username and passowrd to the database
+            # sqlite stuff for submitting username and passowrd to the database
+            return render_template("intro.html")
+        
+        
 
 
 
