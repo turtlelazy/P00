@@ -137,10 +137,24 @@ def new_story():
 # For handling submission of a new story
 @app.route('/new', methods=['POST'])
 def add_story():
-
+    title = request.form['title']
+    story = request.form['story_text']
+    message = ""
+    if not title:
+        message += "Please give your story a title. "
+    if not story:
+        message += "You cannot have an empty story. "
+    if message:
+        return render_template(
+            'new.html',
+            title = title,
+            story = story,
+            message = message
+        )
     return render_template(
         'confirm_add.html',
-
+        title = title,
+        story = story
     )
 
 # Handles when a user visits a page without a route

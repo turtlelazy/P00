@@ -50,3 +50,9 @@ def signup():
         c.execute("INSERT INTO Users VALUES (?, ?)", (username, password))
     
     c.close()
+
+
+def new_story(title, story, id):
+    c = db.cursor()
+    message = "INSERT INTO Stories VALUES (?, ?, ?, ?)", (title, story, story, id)
+    c.execute(message)
