@@ -16,6 +16,10 @@ app.secret_key = 'forgotten charger'
 TEMP_USER = 'user'
 TEMP_PASS = 'pass'
 
+# Utility function to check if there is a session
+def logged_in():
+    return session.get('username') is not None
+
 @app.route('/', methods=['GET'])
 def landing():
 
@@ -70,12 +74,32 @@ def logout():
 
 @app.route('/register', methods=['GET','POST'])
 def register():
+    method = request.method
     # Check for session existence
-    if logged_in():
-        return redirect(url_for('landing'))
-    else:
-        # If not logged in, show login page
-        return render_template('register.html')
+    if method == "GET":
+        if logged_in():
+            return redirect(url_for('landing'))
+        else:
+            # If not logged in, show login page
+            return render_template('register.html')
+
+    if method == "POST":
+        error = False
+        errormsg = ""
+        new_username = request.form["new_username"]
+        new_password = request.form["new_password"]
+        confirm_password = request.form["confirm_password"]
+
+        if confirm_password != new_password:
+            error = True
+            errormsg = "Error: Passwords do not match!"
+            return render_template("register.html", error=error, errmsg=errormsg)
+
+        # sqlite stuff checking for username already exists
+
+        # sqlite stuff for submitting username and passowrd to the database
+
+
 
 # For editing a particular story
 @app.route('/<int:story_id>/edit')
@@ -112,12 +136,6 @@ def add_story():
 @app.errorhandler(404)
 def not_found(e):
     return render_template('404.html'), 404
-
-# Utility function to check if there is a session
-def logged_in():
-    return session.get('username') is not None
-
-
 
 if __name__ == '__main__':
     app.debug = True
