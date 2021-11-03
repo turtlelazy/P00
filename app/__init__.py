@@ -118,7 +118,6 @@ def logged_in():
     return session.get('username') is not None
 
 
-
 if __name__ == '__main__':
     app.debug = True
     app.run()
