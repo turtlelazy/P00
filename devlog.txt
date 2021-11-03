@@ -15,19 +15,13 @@ lucasL, owenY -- 2021-10-29 08:00
 - created static files
 - workingish site up and running
 
+owenY -- 2021-11-1 8:00
+- created story editing templates
+
 aryamanG -- 2021-11-1 8:00
-- created SQLite Databases
+- setup sqlite database
 
-oscarW -- 2021-11-1 08:30
-- added HTML files for login and register
-
-lucasL -- 2021-11-1 08:30
-- created dynamic app routing for story pages
-- basic routing for login, register, creating stories, 404 error
-
-lucasL -- 2021-11-2 19:00
-- created temporary username and password to get login up and running
-- got login/logout functionality and forms working
-- created basic 404 page
-- updated readme launchcodes
-- moved main app to __init__.py
+owenY -- 2021-11-2 23:00
+- added a create new story page
+- added new story verification
+- improved editing template

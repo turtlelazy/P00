@@ -8,6 +8,7 @@ time spent: 0.5
 
 import sqlite3   #enable control of an sqlite database
 import csv       #facilitate CSV I/O
+from flask import Flask, render_template, request, session, redirect, url_for
 
 DB_FILE="StoryCharger.db"
 
@@ -37,3 +38,15 @@ c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
 
 db.commit() #save changes
 db.close()  #close database
+
+def signup():
+    c = db.cursor()  
+    c.execute(("""SELECT username FROM Users WHERE username=?""",(username)))
+    result = c.fetchone()
+
+    if result:
+        prin()
+    else: 
+        c.execute("INSERT INTO Users VALUES (?, ?)", (username, password))
+    
+    c.close()
