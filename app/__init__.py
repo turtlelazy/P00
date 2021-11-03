@@ -100,12 +100,12 @@ def new_story():
     return render_template('new.html')
 
 # For handling submission of a new story
-@app.route('/confirm_add', methods=['GET', 'POST'])
+@app.route('/new', methods=['POST'])
 def add_story():
+
     return render_template(
         'confirm_add.html',
-        title = request.args['title'],
-        story = request.args['story_text']
+
     )
 
 # Handles when a user visits a page without a route
