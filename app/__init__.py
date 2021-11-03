@@ -5,6 +5,7 @@ P00: Cookie and Sessions Introduction
 2021-10-29
 time spent: 0.5
 '''
+import sqlite3
 
 from flask import Flask, render_template, request, session, redirect, url_for
 
@@ -69,7 +70,7 @@ def logout():
 
 @app.route('/register', methods=['GET','POST'])
 def register():
-    # Check for session existance
+    # Check for session existence
     if logged_in():
         return redirect(url_for('landing'))
     else:
@@ -79,7 +80,14 @@ def register():
 # For editing a particular story
 @app.route('/<int:story_id>/edit')
 def edit_story(story_id):
-    pass
+    DB_FILE = "StoryCharger.db"
+
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()
+    command = f"SELECT {story_id} FROM Stories"
+    for item in c.execute(command):
+        print(item)
+    return render_template('edit.html', id = story_id)
 
 # For viewing a particular story
 @app.route('/<int:story_id>')
@@ -87,9 +95,18 @@ def view_story(story_id):
     pass
 
 # For creating a new story
-@app.route('/new')
+@app.route('/new', methods=['GET'])
 def new_story():
-    pass
+    return render_template('new.html')
+
+# For handling submission of a new story
+@app.route('/confirm_add', methods=['GET', 'POST'])
+def add_story():
+    return render_template(
+        'confirm_add.html',
+        title = request.args['title'],
+        story = request.args['story_text']
+    )
 
 # Handles when a user visits a page without a route
 @app.errorhandler(404)

@@ -1,3 +1,11 @@
+owenY -- 2021-11-2 11:00
+- added a create new story page
+- added new story verification
+- improved editing template
+
+owenY -- 2021-11-1 8:00
+- created story editing templates
+
 aryamanG -- 2021-11-1 8:00
 - setup sqlite database
 
