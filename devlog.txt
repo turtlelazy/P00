@@ -25,3 +25,16 @@ owenY -- 2021-11-2 23:00
 - added a create new story page
 - added new story verification
 - improved editing template
+
+aryamanG -- 2021-11-3 8:00
+- writing users to daabase 
+- verifiying two users do not have the same username
+
+owenY -- 2021-11-3 08:00
+- checking user input for new stories
+- updating database with new stories
+- confirmation page for new stories
+
+owenY -- 2021-11-3 15:00
+- fixed problem with new story page
+- cleaned up html templates
