@@ -90,11 +90,20 @@ def register():
         new_password = request.form["new_password"]
         confirm_password = request.form["confirm_password"]
 
-        if confirm_password != new_password:
+        if new_username == "":
+            error = True
+            errormsg = "Error: No username entered!"
+            return render_template("register.html", error=error, errmsg=errormsg)
+        elif new_password == "":
+            error = True
+            errormsg = "Error: No password entered!"
+            return render_template("register.html", error=error, errmsg=errormsg)
+        elif confirm_password != new_password:
             error = True
             errormsg = "Error: Passwords do not match!"
             return render_template("register.html", error=error, errmsg=errormsg)
-
+        #else:
+        
         # sqlite stuff checking for username already exists
 
         # sqlite stuff for submitting username and passowrd to the database
