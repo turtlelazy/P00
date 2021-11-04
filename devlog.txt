@@ -38,7 +38,7 @@ owenY -- 2021-11-2 23:00
 - improved editing template
 
 aryamanG -- 2021-11-3 8:00
-- writing users to daabase 
+- writing users to daabase
 - verifiying two users do not have the same username
 
 owenY -- 2021-11-3 08:00
@@ -51,9 +51,19 @@ oscarW -- 2021-11-3 8:00
 - added heading to index page
 - centered login / register elements
 
+aryamanG -- 2021-11-3 8:00
+- writing users to database
+- verifiying two users do not have the same username
+
+aryamanG -- 2021-11-3 12:00
+- created login and signup functions to retrieve data from user and verify with database
+
 owenY -- 2021-11-3 15:00
 - fixed problem with new story page
 - cleaned up html templates
+
+aryamanG -- 2020-11-3 19:00
+- made signup/login code more robust + fixed bugs
 
 oscarW -- 2021-11-3 21:00
 - deleted extraneous SQLite tables
