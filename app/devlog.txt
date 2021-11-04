@@ -30,3 +30,8 @@ owenY -- 2021-11-2 11:00
 aryamanG -- 2021-11-3 8:00
 - writing users to daabase 
 - verifiying two users do not have the same username
+
+oscarW -- 2021-11-3 8:00-3:30
+- designed registration page and form verification for it
+- added heading to index page
+- centered login / register elements
