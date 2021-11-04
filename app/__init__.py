@@ -103,14 +103,9 @@ def register():
         if error:
             return render_template("register.html", error=error, errmsg=errormsg)
         else: 
-            session['username'] = new_username
-            return render_template('index.html')
+            return render_template('intro.html')
 
-        # sqlite stuff checking for username already exists
-        # sqlite stuff for submitting username and passowrd to the database
 
-    
-        
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
 
