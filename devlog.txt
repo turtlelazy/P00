@@ -54,3 +54,8 @@ oscarW -- 2021-11-3 8:00
 owenY -- 2021-11-3 15:00
 - fixed problem with new story page
 - cleaned up html templates
+
+oscarW -- 2021-11-3 21:00
+- deleted extraneous SQLite tables
+- debugged registration / login
+- linked new story page in index
