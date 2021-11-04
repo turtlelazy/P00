@@ -71,7 +71,7 @@ def register():
         else:
             # If not logged in, show login page
             return render_template('register.html', error=error, errmsg=errormsg)
-            
+
     if method == "POST":
         new_username = request.form["new_username"]
         new_password = request.form["new_password"]
@@ -89,20 +89,12 @@ def register():
             error = True
             errormsg = "Error: Passwords do not match!"
             return render_template("register.html", error=error, errmsg=errormsg)
-        if new_username == "":
-            error = True
-            errormsg = "Error: No username entered!"
-            return render_template("register.html", error=error, errmsg=errormsg)
-        elif new_password == "":
-            error = True
-            errormsg = "Error: No password entered!"
-            return render_template("register.html", error=error, errmsg=errormsg)
 
         error, errormsg = db_builder.signup(new_username, new_password)
 
         if error:
             return render_template("register.html", error=error, errmsg=errormsg)
-        else: 
+        else:
             return render_template('intro.html')
 
 
@@ -125,39 +117,45 @@ def edit_story(story_id):
 @app.route('/<int:story_id>')
 def view_story(story_id):
     pass
-
-# For creating a new story
-@app.route('/new', methods=['GET'])
-def new_story():
-    return render_template('new.html')
+    
 
 # For handling submission of a new story
-@app.route('/new', methods=['POST'])
+@app.route('/new', methods=['GET','POST'])
 def add_story():
-    title = request.form['title']
-    story = request.form['story_text']
-    confirm = request.form['sub1']
-    if confirm == "Confirm":
-        # make changes in database
-        db_builder.new_story(title, story)
-        print(title)
-        print(story)
-        print('changes attempted')
-    message = ""
-    if not title:
-        message += "Please give your story a title. "
-    if not story:
-        message += "You cannot have an empty story. "
-    if message:
+
+    method = request.method
+
+    if method == 'GET':
+        return render_template('new.html')
+
+
+    if method == 'POST':
+
+        title = request.form['title']
+        story = request.form['story_text']
+        confirm = request.form['sub1']
+        if confirm == "Confirm":
+            # make changes in database
+            db_builder.new_story(title, story)
+            print(title)
+            print(story)
+            print('changes attempted')
+        message = ""
+        if not title:
+            message += "Please give your story a title. "
+        if not story:
+            message += "You cannot have an empty story. "
+        if message:
+            return render_template(
+                'new.html',
+                title = title,
+                story = story,
+                message = message
+            )
         return render_template(
-            'new.html',
-            title = title,
-            story = story,
-            message = message
+            'confirm_add.html',
         )
-    return render_template(
-        'confirm_add.html',
-    )
+
 # Handles when a user visits a page without a route
 @app.errorhandler(404)
 def not_found(e):
@@ -166,4 +164,3 @@ def not_found(e):
 if __name__ == '__main__':
     app.debug = True
     app.run()
-    
