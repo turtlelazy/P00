@@ -1,12 +1,12 @@
 '''
-Forgotten Charger: Lewis Cass, Aryaman Goenka, Oscar Wang
+Forgotten Charger: Lewis Cass, Aryaman Goenka, Oscar Wang, Owen Yaggy
 Softdev
 P00: Cookie and Sessions Introduction
 2021-10-29
 time spent: 0.5
 '''
 import sqlite3
-import app.db_builder
+import db_builder
 from flask import Flask, render_template, request, session, redirect, url_for
 
 app = Flask(__name__)
@@ -22,7 +22,6 @@ def logged_in():
 
 @app.route('/', methods=['GET'])
 def landing():
-
     # Check for session existance
     if logged_in():
         return render_template('index.html')
@@ -32,60 +31,48 @@ def landing():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-
     method = request.method
-
+    error = False
+    # Check for session existance
     if method == 'GET':
 
-        # Check for session existance
         if logged_in():
-            return redirect(url_for('landing'))
+            return render_template('index.html')
         else:
             # If not logged in, show login page
-            return render_template('login.html', error=False)
+            return render_template('login.html', error=error)
 
     if method == 'POST':
 
         # Get information from request.form since it is submitted via post
         username = request.form['username']
         password = request.form['password']
+        error = db_builder.login(username, password)
 
-        if username == TEMP_USER and password == TEMP_PASS:
+        if error:
+            # If incorrect, give feedback to the user
+            return render_template('login.html', error=error)
+        else:
             # Store user info into a cookie
             session['username'] = username
-            return redirect(url_for('landing'))
-
-        else:
-
-            # If incorrect, give feedback to the user
-            return render_template('login.html', error=True)
-
-@app.route('/logout', methods=['GET', 'POST'])
-def logout():
-
-    # Once again check for a key before popping it
-    if logged_in():
-        session.pop('username')
-
-    # After logout, return to login page
-    return redirect(url_for('landing'))
-
-
+            ##return redirect(url_for('landing'))
+            return render_template('index.html')
 
 @app.route('/register', methods=['GET','POST'])
 def register():
     method = request.method
+    error = True
+    errormsg = ""
     # Check for session existence
     if method == "GET":
         if logged_in():
-            return redirect(url_for('landing'))
+            return render_template('index.html')
+            ##return render_template('confirm_add.html')
         else:
             # If not logged in, show login page
-            return render_template('register.html')
-
+            return render_template('register.html', error=error, errmsg=errormsg)
+            
     if method == "POST":
-        error = False
-        errormsg = ""
         new_username = request.form["new_username"]
         new_password = request.form["new_password"]
         confirm_password = request.form["confirm_password"]
@@ -102,15 +89,37 @@ def register():
             error = True
             errormsg = "Error: Passwords do not match!"
             return render_template("register.html", error=error, errmsg=errormsg)
-        else:
-            # sqlite stuff checking for username already exists
+        if new_username == "":
+            error = True
+            errormsg = "Error: No username entered!"
+            return render_template("register.html", error=error, errmsg=errormsg)
+        elif new_password == "":
+            error = True
+            errormsg = "Error: No password entered!"
+            return render_template("register.html", error=error, errmsg=errormsg)
 
-            # sqlite stuff for submitting username and passowrd to the database
-            return render_template("intro.html")
+        error, errormsg = db_builder.signup(new_username, new_password)
+
+        if error:
+            return render_template("register.html", error=error, errmsg=errormsg)
+        else: 
+            session['username'] = new_username
+            return render_template('index.html')
+
+        # sqlite stuff checking for username already exists
+        # sqlite stuff for submitting username and passowrd to the database
+
+    
         
-        
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
 
+    # Once again check for a key before popping it
+    if logged_in():
+        session.pop('username')
 
+    # After logout, return to login page
+    return redirect(url_for('landing'))
 
 # For editing a particular story
 @app.route('/<int:story_id>/edit')
@@ -153,10 +162,7 @@ def add_story():
         )
     return render_template(
         'confirm_add.html',
-        title = title,
-        story = story
     )
-
 # Handles when a user visits a page without a route
 @app.errorhandler(404)
 def not_found(e):
@@ -165,3 +171,4 @@ def not_found(e):
 if __name__ == '__main__':
     app.debug = True
     app.run()
+    
