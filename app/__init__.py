@@ -12,10 +12,6 @@ from flask import Flask, render_template, request, session, redirect, url_for
 app = Flask(__name__)
 app.secret_key = 'forgotten charger'
 
-# Temporary username and password system
-TEMP_USER = 'user'
-TEMP_PASS = 'pass'
-
 # Utility function to check if there is a session
 def logged_in():
     return session.get('username') is not None
@@ -77,15 +73,7 @@ def register():
         new_password = request.form["new_password"]
         confirm_password = request.form["confirm_password"]
 
-        if new_username == "":
-            error = True
-            errormsg = "Error: No username entered!"
-            return render_template("register.html", error=error, errmsg=errormsg)
-        elif new_password == "":
-            error = True
-            errormsg = "Error: No password entered!"
-            return render_template("register.html", error=error, errmsg=errormsg)
-        elif confirm_password != new_password:
+        if confirm_password != new_password:
             error = True
             errormsg = "Error: Passwords do not match!"
             return render_template("register.html", error=error, errmsg=errormsg)
@@ -105,10 +93,6 @@ def register():
         else: 
             session['username'] = new_username
             return render_template('index.html')
-
-        # sqlite stuff checking for username already exists
-        # sqlite stuff for submitting username and passowrd to the database
-
     
         
 @app.route('/logout', methods=['GET', 'POST'])
