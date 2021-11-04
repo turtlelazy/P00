@@ -46,6 +46,11 @@ owenY -- 2021-11-3 08:00
 - updating database with new stories
 - confirmation page for new stories
 
+oscarW -- 2021-11-3 8:00
+- designed registration page and form verification for it
+- added heading to index page
+- centered login / register elements
+
 owenY -- 2021-11-3 15:00
 - fixed problem with new story page
 - cleaned up html templates
