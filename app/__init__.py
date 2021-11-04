@@ -51,14 +51,13 @@ def login():
         else:
             # Store user info into a cookie
             session['username'] = username
-            ##return redirect(url_for('landing'))
-            return render_template('index.html')
+
+            return redirect(url_for('landing'))
 
 @app.route('/register', methods=['GET','POST'])
 def register():
     method = request.method
-    error = True
-    errormsg = ""
+
     # Check for session existence
     if method == "GET":
         if logged_in():
@@ -66,27 +65,37 @@ def register():
             ##return render_template('confirm_add.html')
         else:
             # If not logged in, show login page
-            return render_template('register.html', error=error, errmsg=errormsg)
+            return render_template('register.html', error=False, errmsg="n/a")
 
     if method == "POST":
         new_username = request.form["new_username"]
         new_password = request.form["new_password"]
         confirm_password = request.form["confirm_password"]
 
-        if confirm_password != new_password:
+        error = False
+        errormsg = ""
+        if not new_username:
+            error = True
+            errormsg = "Error: No username entered!"
+        elif not new_password:
+            error = True
+            errormsg = "Error: No password entered!"
+        elif confirm_password != new_password:
             error = True
             errormsg = "Error: Passwords do not match!"
+
+        if error:
             return render_template("register.html", error=error, errmsg=errormsg)
 
         error, errormsg = db_builder.signup(new_username, new_password)
 
         if error:
             return render_template("register.html", error=error, errmsg=errormsg)
-        else: 
+        else:
             session['username'] = new_username
-            return render_template('index.html')
-    
-        
+            return redirect(url_for('landing'))
+
+
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
 
@@ -106,7 +115,7 @@ def edit_story(story_id):
 @app.route('/<int:story_id>')
 def view_story(story_id):
     pass
-    
+
 
 # For handling submission of a new story
 @app.route('/new', methods=['GET','POST'])
@@ -129,7 +138,7 @@ def add_story():
             print(title)
             print(story)
             print('changes attempted')
-            
+
         message = ""
         if not title:
             message += "Please give your story a title. "
