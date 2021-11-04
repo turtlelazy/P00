@@ -92,6 +92,7 @@ def register():
         if error:
             return render_template("register.html", error=error, errmsg=errormsg)
         else:
+            session['username'] = new_username
             return redirect(url_for('landing'))
 
 
