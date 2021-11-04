@@ -138,6 +138,7 @@ def add_story():
             print(title)
             print(story)
             print('changes attempted')
+            return render_template('index.html', message = "Your story was saved.")
 
         message = ""
         if not title:
@@ -153,6 +154,8 @@ def add_story():
             )
         return render_template(
             'confirm_add.html',
+            title = title,
+            story = story
         )
 
 # Handles when a user visits a page without a route

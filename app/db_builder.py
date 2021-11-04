@@ -8,10 +8,9 @@ time spent: 0.5
 
 import sqlite3   #enable control of an sqlite database
 import csv       #facilitate CSV I/O
+DB_FILE="StoryCharger.db"
 
 def dbseteup():
-    DB_FILE="StoryCharger.db"
-
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
@@ -39,11 +38,10 @@ def dbseteup():
     db.close()  #close database
 
 def signup(username, password):
-    DB_FILE="StoryCharger.db"
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
 
     c = db.cursor()  
-    ##dbseteup()
+    dbseteup()
 
     c.execute("""SELECT Username FROM Users WHERE Username=?""",[username])
     result = c.fetchone()
@@ -58,7 +56,6 @@ def signup(username, password):
 
 
 def login(username, password):
-    DB_FILE="StoryCharger.db"
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
 
     c = db.cursor()  
@@ -74,11 +71,9 @@ def login(username, password):
         return(True)
 
 def new_story(title, story):
-    DB_FILE = "StoryCharger.db"
-
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
-    dbseteup()
+    ##dbseteup()
 
     c.execute("INSERT INTO Stories VALUES (?, ?, ?)", (title, story, story))
 
