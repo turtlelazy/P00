@@ -7,11 +7,14 @@
 <body>
     <h1>Create a New Story</h1>
     <form action="/new" method="post">
+        {% if message %}
+        <p style="color:red">{{ message }}</p>
+        {% endif %}
         <h3>Please name your story:</h3>
-        <input type="text" name="title">
+        <input type="text" name="title" value="{% if title %}{{ title }}{% endif %}">
         <h3>Once upon a time…</h3>
         <p>Write the beginning of your story below! Other users can add their own parts later.</p>
-        <textarea name="story_text" cols="40" rows="5"></textarea>
+        <textarea name="story_text" cols="40" rows="5">{% if story %}{{ story }}{% endif %}</textarea>
         <br>
         <input type="submit" name="sub1" value="Add Story">
     </form>
