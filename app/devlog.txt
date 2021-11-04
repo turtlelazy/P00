@@ -28,5 +28,11 @@ owenY -- 2021-11-2 11:00
 - improved editing template
 
 aryamanG -- 2021-11-3 8:00
-- writing users to daabase 
+- writing users to database 
 - verifiying two users do not have the same username
+
+aryamanG -- 2021-11-3 12:00
+- created login and signup functions to retrieve data from user and verify with database
+
+aryamanG -- 2020-11-3 19:00
+- made signup/login code more robust + fixed bugs
