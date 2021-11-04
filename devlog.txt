@@ -63,5 +63,9 @@ aryamanG -- 2020-11-3 19:00
 
 oscarW -- 2021-11-3 21:00
 - deleted extraneous SQLite tables
-- debugged registration / login
 - linked new story page in index
+
+aryamanG -- 2021-11-4 15:00
+- linked new stories to story and contributions tables 
+- accessed user sessions to store original story id and user id with specific contributions
+- updating database when users add to existing story

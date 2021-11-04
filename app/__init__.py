@@ -51,7 +51,6 @@ def login():
         else:
             # Store user info into a cookie
             session['username'] = username
-
             return redirect(url_for('landing'))
 
 @app.route('/register', methods=['GET','POST'])
@@ -134,7 +133,7 @@ def add_story():
         
         if confirm == "Confirm":
             # make changes in database
-            db_builder.new_story(title, story)
+            db_builder.new_story(title, story, session['username'])
             print(title)
             print(story)
             print('changes attempted')
