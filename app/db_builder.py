@@ -39,6 +39,16 @@ c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
 db.commit() #save changes
 db.close()  #close database
 
+def setup():
+    DB_FILE = "StoryCharger.db"
+
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    return(db.cursor(), db)
+
+def save(db):
+    db.commit()
+    db.close()
+
 def signup():
     c = db.cursor()  
     c.execute(("""SELECT username FROM Users WHERE username=?""",(username)))
@@ -50,3 +60,19 @@ def signup():
         c.execute("INSERT INTO Users VALUES (?, ?)", (username, password))
     
     c.close()
+
+
+def new_story(title, story):
+    #c, db = setup()
+    DB_FILE = "StoryCharger.db"
+
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()
+    id = 0
+    for s in c.execute("SELECT StoryID FROM Stories"):
+        id += 1
+
+    c.execute("INSERT INTO Stories VALUES (?, ?, ?, ?)", (title, story, story, id + 1))
+    db.commit()
+    db.close()
+    # db.save()
