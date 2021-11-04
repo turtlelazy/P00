@@ -25,7 +25,7 @@ def dbseteup():
     # run SQL statement
 
     c.execute("Drop Table if exists Stories")
-    command = "Create Table Stories (Title Text, FullStory Text, Latest_Update Text, StoryID Primary Key)"    
+    command = "Create Table Stories (Title Text, FullStory Text, Latest_Update Text)"    
     c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
     # run SQL statement
 
@@ -74,16 +74,14 @@ def login(username, password):
         return(True)
 
 def new_story(title, story):
-    #c, db = setup()
     DB_FILE = "StoryCharger.db"
 
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
-    id = 0
-    for s in c.execute("SELECT StoryID FROM Stories"):
-        id += 1
+    dbseteup()
 
-    c.execute("INSERT INTO Stories VALUES (?, ?, ?, ?)", (title, story, story, id + 1))
+    c.execute("INSERT INTO Stories VALUES (?, ?, ?)", (title, story, story))
+
     db.commit()
     db.close()
    

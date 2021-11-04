@@ -117,18 +117,19 @@ def add_story():
     if method == 'GET':
         return render_template('new.html')
 
-
     if method == 'POST':
 
         title = request.form['title']
         story = request.form['story_text']
         confirm = request.form['sub1']
+        
         if confirm == "Confirm":
             # make changes in database
             db_builder.new_story(title, story)
             print(title)
             print(story)
             print('changes attempted')
+            
         message = ""
         if not title:
             message += "Please give your story a title. "
