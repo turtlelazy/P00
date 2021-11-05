@@ -15,10 +15,10 @@ lucasL, owenY -- 2021-10-29 08:00
 - created static files
 - workingish site up and running
 
-owenY -- 2021-11-1 8:00
+owenY -- 2021-11-1 08:00
 - created story editing templates
 
-aryamanG -- 2021-11-1 8:00
+aryamanG -- 2021-11-1 08:00
 - setup sqlite database
 
 lucasL -- 2021-11-1 08:30
@@ -42,12 +42,12 @@ owenY -- 2021-11-3 08:00
 - updating database with new stories
 - confirmation page for new stories
 
-oscarW -- 2021-11-3 8:00
+oscarW -- 2021-11-3 08:00
 - designed registration page and form verification for it
 - added heading to index page
 - centered login / register elements
 
-aryamanG -- 2021-11-3 8:00
+aryamanG -- 2021-11-3 08:00
 - writing users to database
 - verifiying two users do not have the same username
 
@@ -64,6 +64,9 @@ aryamanG -- 2020-11-3 19:00
 oscarW -- 2021-11-3 21:00
 - deleted extraneous SQLite tables
 - linked new story page in index
+
+owenY -- 2021-11-4 08:00
+- finished new story frontend and backend (without css)
 
 aryamanG -- 2021-11-4 15:00
 - linked new stories to story and contributions tables 
