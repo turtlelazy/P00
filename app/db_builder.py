@@ -16,7 +16,7 @@ def dbseteup():
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
     c.execute("Drop Table if exists Users")
-    command = "Create Table Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username Text, Password Text)"    
+    command = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username Text, Password Text)"
     c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
     # run SQL statement
 
@@ -26,7 +26,7 @@ def dbseteup():
     # run SQL statement
 
     c.execute("DROP TABLE IF EXISTS Contributions")
-    command = "CREATE TABLE Contributions (ID INTEGER PRIMARY KEY AUTOINCREMENT, UserID INTEGER, StoryID INTEGER, Contribution TEXT, FOREIGN KEY (UserID) REFERENCES Users (ID), FOREIGN KEY (StoryID) REFERENCES Stories (ID))"
+    command = "CREATE TABLE Contributions (ID INTEGER PRIMARY KEY AUTOINCREMENT, UserID INTEGER, StoryID INTEGER, Contribution TEXT)"
     c.execute(command)
 
     db.commit() #save changes
@@ -35,13 +35,12 @@ def dbseteup():
 
 def get_contributed_stories(username):
 
-    return [(123543, "Title1"), (328543, "Title2")]
 
 def get_non_contrtibuted_stories(username):
 
     return [(3453, "Title3"), (435636, "Title4")]
 
-def check_if_contributed(story_id):
+def check_if_contributed(story_id, username):
 
     return True
 
@@ -51,7 +50,7 @@ def signup(username, password):
 
     c = db.cursor()
 
-    dbseteup()
+    ##dbseteup()
 
     c.execute("""SELECT Username FROM Users WHERE Username=?""",[username])
     result = c.fetchone()
@@ -74,6 +73,7 @@ def login(username, password):
     result = c.fetchone()
 
     if result:
+    if method == "POST":
         ##access this specifc user data
         return(False)
 
@@ -112,4 +112,3 @@ def add_story(story_id, story, new_update, username):
 
     db.commit()
     db.close()
-
