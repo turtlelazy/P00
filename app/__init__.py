@@ -26,7 +26,7 @@ def landing():
         viewable_stories = db_builder.get_viewable_stories(username)
         editable_stories = db_builder.get_editable_stories(username)
 
-        return render_template('index.html', viewable=viewable_stories, edtiable=editable_stories)
+        return render_template('index.html', username=username,viewable=viewable_stories, edtiable=editable_stories)
 
     else:
         # If not logged in, show login page
@@ -35,15 +35,16 @@ def landing():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     method = request.method
-    error = False
+
     # Check for session existance
     if method == 'GET':
 
         if logged_in():
-            return render_template('index.html')
+
+            return redirect(url_for('landing'))
         else:
             # If not logged in, show login page
-            return render_template('login.html', error=error)
+            return render_template('login.html', error=False)
 
     if method == 'POST':
 
@@ -67,36 +68,32 @@ def register():
     # Check for session existence
     if method == "GET":
         if logged_in():
-            return render_template('index.html')
-            ##return render_template('confirm_add.html')
+
+            return redirect(url_for('landing'))
         else:
-            # If not logged in, show login page
-            return render_template('register.html', error=False, errmsg="n/a")
+            # If not logged in, show regsiter page
+            return render_template('register.html', error_message="")
 
     if method == "POST":
         new_username = request.form["new_username"]
         new_password = request.form["new_password"]
         confirm_password = request.form["confirm_password"]
 
-        error = False
-        errormsg = ""
+        error_message = ""
         if not new_username:
-            error = True
-            errormsg = "Error: No username entered!"
+            error_message = "Error: No username entered!"
         elif not new_password:
-            error = True
-            errormsg = "Error: No password entered!"
+            error_message = "Error: No password entered!"
         elif confirm_password != new_password:
-            error = True
-            errormsg = "Error: Passwords do not match!"
+            error_message = "Error: Passwords do not match!"
 
-        if error:
-            return render_template("register.html", error=error, errmsg=errormsg)
+        if error_message:
+            return render_template("register.html", error_message=error_message)
 
-        error, errormsg = db_builder.signup(new_username, new_password)
+        error_message = db_builder.signup(new_username, new_password)
 
-        if error:
-            return render_template("register.html", error=error, errmsg=errormsg)
+        if error_message:
+            return render_template("register.html", error_message=error_message)
         else:
             session['username'] = new_username
             return redirect(url_for('landing'))
@@ -121,6 +118,9 @@ def edit_story(story_id):
         username = session['username']
 
         if db_builder.contributed(story_id, username):
+
+            # Can only edit story that was not contributed to
+
             return redirect(url_for('view_story', story_id=story_id))
         else:
             return render_template('edit.html')
@@ -138,6 +138,7 @@ def view_story(story_id):
 
         if not db_builder.contributed(story_id, username):
 
+            # Can only view story that was contributed to
             return redirect(url_for('edit_story', story_id=story_id))
 
         else:
@@ -163,27 +164,29 @@ def add_story():
 
         title = request.form['title']
         story = request.form['story_text']
-        confirm = request.form['sub1']
+        confirm = request.form['submit']
 
+        # Checks if form submited was either to confirm or add
         if confirm == "Confirm":
+
             # make changes in database
             db_builder.new_story(title, story, session['username'])
-            print(title)
-            print(story)
-            print('changes attempted')
-            return render_template('index.html', message = "Your story was saved.")
 
-        message = ""
+            return redirect(url_for('landing'))
+
+        error_message = ""
         if not title:
-            message += "Please give your story a title. "
-        if not story:
-            message += "You cannot have an empty story. "
-        if message:
+            error_message = "Please give your story a title."
+        elif not story:
+            error_message = "You cannot have an empty story."
+
+        print(error_message)
+        if error_message:
             return render_template(
                 'new.html',
                 title = title,
                 story = story,
-                message = message
+                message = error_message
             )
         return render_template(
             'confirm_add.html',

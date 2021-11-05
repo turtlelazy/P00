@@ -61,12 +61,12 @@ def signup(username, password):
         db.commit()
         db.close()
 
-        return(True, "Username already exists")
+        return "Username already exists"
     else:
         c.execute('INSERT INTO Users VALUES (null, ?, ?)', (username, password))
         db.commit()
         db.close()
-        return(False, "Welcome")
+        return ""
 
 
 def login(username, password):
@@ -82,10 +82,10 @@ def login(username, password):
 
     if result:
         ##access this specifc user data
-        return(False)
+        return False
 
     else:
-        return(True)
+        return True
 
 
 def new_story(title, story, username):

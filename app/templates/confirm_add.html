@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Add Your Story</title>
 </head>
+
 <body>
-<p>Press <b>confirm</b> to confirm that you would like to post this story</p>
-<p>Need to make changes? Use your browser's <b>back</b> button.</p>
-<h2>{{ title }}</h2>
-<p>{{ story }}</p>
-<form action="/new" method="post">
-    <input type="hidden" name="title" value="{{ title }}">
-    <input type="hidden" name="story_text" value="{{ story }}">
-    <input type="submit" name="sub1" value="Confirm">
-</form>
+    <p>Press <b>confirm</b> to confirm that you would like to post this story</p>
+    <p>Need to make changes? Use your browser's <b>back</b> button.</p>
+    <h2>{{ title }}</h2>
+    <p>{{ story }}</p>
+    <form action="/new" method="post">
+        <input type="hidden" name="title" value="{{ title }}">
+        <input type="hidden" name="story_text" value="{{ story }}">
+        <input type="submit" name="submit" value="Confirm">
+    </form>
 </body>
+
 </html>
