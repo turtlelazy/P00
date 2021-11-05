@@ -114,13 +114,37 @@ def logout():
 # For editing a particular story
 @app.route('/<int:story_id>/edit')
 def edit_story(story_id):
-    return render_template('edit.html')
+
+    if logged_in():
+
+        username = session['username']
+
+        if db_builder.contributed(story_id, username):
+            return redirect(url_for('view_story', story_id=story_id))
+        else:
+            return render_template('edit.html')
+
+    else:
+        return redirect(url_for('landing'))
 
 # For viewing a particular story
 @app.route('/<int:story_id>')
 def view_story(story_id):
-    title, story = db_builder.view_story(story_id)
-    return render_template('view.html', title=title, story=story)
+
+    if logged_in():
+
+        username = session['username']
+
+        if not db_builder.contributed(story_id, username):
+            return redirect(url_for('edit_story', story_id=story_id))
+
+        else:
+            title, story = db_builder.view_story(story_id)
+            return render_template('view.html', title=title, story=story)
+
+    else:
+        return redirect(url_for('landing'))
+
 
 
 # For handling submission of a new story

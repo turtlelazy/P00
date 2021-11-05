@@ -16,7 +16,7 @@ def dbseteup():
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
     c.execute("Drop Table if exists Users")
-    command = "Create Table Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username Text, Password Text)"    
+    command = "Create Table Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username Text, Password Text)"
     c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
     # run SQL statement
 
@@ -41,7 +41,7 @@ def get_non_contrtibuted_stories(username):
 
     return [(3453, "Title3"), (435636, "Title4")]
 
-def check_if_contributed(story_id):
+def contributed(story_id, username):
 
     return True
 
