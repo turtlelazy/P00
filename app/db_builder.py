@@ -21,12 +21,12 @@ def dbseteup():
     # run SQL statement
 
     c.execute("DROP TABLE IF EXISTS Stories")
-    command = "CRATE TABLE Stories (ID INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, FullStory TEXT, Latest_Update TEXT)"
+    command = "CREATE TABLE Stories (ID INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, FullStory TEXT, Latest_Update TEXT)"
     c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
     # run SQL statement
 
     c.execute("DROP TABLE IF EXISTS Contributions")
-    command = "CREATE TABLE Contributions (ID INTEGER PRIMARY KEY AUTOINCREMENT, UserID INTEGER, StoryID INTEGER, Contribution TEXT)"
+    command = "CREATE TABLE Contributions (ID INTEGER PRIMARY KEY AUTOINCREMENT, UserID INTEGER, StoryID INTEGER, Contribution TEXT, FOREIGN KEY (UserID) REFERENCES Users (ID), FOREIGN KEY (StoryID) REFERENCES Stories (ID))"
     c.execute(command)
 
     db.commit() #save changes
@@ -45,7 +45,7 @@ def signup(username, password):
 
     c = db.cursor()
 
-    ##dbseteup()
+    dbseteup()
 
     c.execute("""SELECT Username FROM Users WHERE Username=?""",[username])
     result = c.fetchone()
@@ -106,3 +106,4 @@ def add_story(story_id, story, new_update, username):
 
     db.commit()
     db.close()
+
