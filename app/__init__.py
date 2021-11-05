@@ -20,7 +20,13 @@ def logged_in():
 def landing():
     # Check for session existance
     if logged_in():
-        return render_template('index.html')
+
+        username = session['username']
+
+        viewable_stories = db_builder.get_contributed_stories(username)
+        editable_stories = db_builder.get_non_contrtibuted_stories(username)
+
+        return render_template('index.html', viewable=viewable_stories, edtiable=editable_stories)
     else:
         # If not logged in, show login page
         return render_template('intro.html')
@@ -131,7 +137,7 @@ def add_story():
         title = request.form['title']
         story = request.form['story_text']
         confirm = request.form['sub1']
-        
+
         if confirm == "Confirm":
             # make changes in database
             db_builder.new_story(title, story, session['username'])
