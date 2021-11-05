@@ -26,7 +26,7 @@ def dbseteup():
     # run SQL statement
 
     c.execute("DROP TABLE IF EXISTS Contributions")
-    command = "CREATE TABLE Contributions (ID INTEGER PRIMARY KEY AUTOINCREMENT, UserID INTEGER, StoryID INTEGER, Contribution TEXT, FOREIGN KEY (UserID) REFERENCES Users (ID), FOREIGN KEY (StoryID) REFERENCES Stories (ID))"
+    command = "CREATE TABLE Contributions (ID INTEGER PRIMARY KEY AUTOINCREMENT, UserID INTEGER, StoryID INTEGER, Contribution TEXT)"
     c.execute(command)
 
     db.commit() #save changes
@@ -39,13 +39,21 @@ def get_contributed_stories(username):
 def get_editable_stories(username):
     pass
 
+def get_non_contrtibuted_stories(username):
+
+    return [(3453, "Title3"), (435636, "Title4")]
+
+def check_if_contributed(story_id, username):
+
+    return True
+
 
 def signup(username, password):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
 
     c = db.cursor()
 
-    dbseteup()
+    ##dbseteup()
 
     c.execute("""SELECT Username FROM Users WHERE Username=?""",[username])
     result = c.fetchone()
