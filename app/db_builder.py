@@ -33,19 +33,18 @@ def dbseteup():
     db.close()  #close database
 
 
-def get_contributed_stories(username):
-    pass
-
 def get_editable_stories(username):
-    pass
 
-def get_non_contrtibuted_stories(username):
+    return [(3753, "Title1"), (94385, "Title2")]
+
+
+def get_viewable_stories(username):
 
     return [(3453, "Title3"), (435636, "Title4")]
 
 def contributed(story_id, username):
 
-    return True
+    return False
 
 
 def signup(username, password):
@@ -128,11 +127,11 @@ def get_story(story_id):
     c.execute("SELECT Title,FullStory,Latest_Update FROM Stories WHERE ID=?", [story_id])
     entry = c.fetchone()
 
-    Title = entry[0]
-    Story = entry[1]
-    LatestUpdate = entry[2]
+    title = entry[0]
+    story = entry[1]
+    latest_update = entry[2]
 
     db.commit()
     db.close()
 
-    return (Title, Story, LatestUpdate)
+    return (title, story, latest_update)

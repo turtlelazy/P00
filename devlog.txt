@@ -85,6 +85,7 @@ owenY -- 2021-11-5 08:00
 - added basic view functionality
 
 lucasL - 2021-11-5 12:00
-- updated template for main page
+- updated template for main page to list availible stories
 - got backend working for retrieving a story based on id
 - templated methods for getting editable and viewable stories based on username
+- got story viewing page working and connected

@@ -23,10 +23,11 @@ def landing():
 
         username = session['username']
 
-        viewable_stories = db_builder.get_contributed_stories(username)
-        editable_stories = db_builder.get_non_contrtibuted_stories(username)
+        viewable_stories = db_builder.get_viewable_stories(username)
+        editable_stories = db_builder.get_editable_stories(username)
 
         return render_template('index.html', viewable=viewable_stories, edtiable=editable_stories)
+
     else:
         # If not logged in, show login page
         return render_template('intro.html')
