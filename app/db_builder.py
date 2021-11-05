@@ -15,8 +15,8 @@ def dbseteup():
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
-    c.execute("DROP TABLE IF EXISTS Users")
-    command = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username TEXT, Password INTEGER)"
+    c.execute("Drop Table if exists Users")
+    command = "Create Table Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username Text, Password Text)"    
     c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
     # run SQL statement
 
