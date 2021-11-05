@@ -15,8 +15,8 @@ def dbseteup():
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
-    c.execute("Drop Table if exists Users")
-    command = "Create Table Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username Text, Password Text)"    
+    c.execute("DROP TABLE IF EXISTS Users")
+    command = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT)"    
     c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
     # run SQL statement
 
@@ -34,16 +34,10 @@ def dbseteup():
 
 
 def get_contributed_stories(username):
+    pass
 
-    return [(123543, "Title1"), (328543, "Title2")]
-
-def get_non_contrtibuted_stories(username):
-
-    return [(3453, "Title3"), (435636, "Title4")]
-
-def check_if_contributed(story_id):
-
-    return True
+def get_editable_stories(username):
+    pass
 
 
 def signup(username, password):
@@ -113,3 +107,13 @@ def add_story(story_id, story, new_update, username):
     db.commit()
     db.close()
 
+def view_story(story_id):
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()
+
+    c.execute("SELECT Title AND FullStory AND Latest_Update WHERE ID=?", [story_id])
+    Title = c.fetchone()[0]
+    Story = c.fetchone()[1]
+    LatestUpdate = c.fetchone()[2]
+
+    return (Title, Story, LatestUpdate)
