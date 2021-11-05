@@ -74,7 +74,7 @@ def new_story(title, story, username):
 
     c.execute('INSERT INTO Stories VALUES (null, ?, ?, ?)', (title, story, story))
 
-    c.execute("SELECT ID FROM Stories WHERE Title=? AND Latest_Update=?", [title, story])
+    c.execute("SELECT ID FROM Stories WHERE Title=? AND Latest_Update=? AND FullStory=?", [title, story, story])
     story_id = c.fetchone()[0]
 
     c.execute("SELECT ID FROM Users WHERE Username=?", [username])
@@ -86,19 +86,16 @@ def new_story(title, story, username):
     db.close()
    
 
-def add_story(title, story, new_update, username):
+def add_story(story_id, story, new_update, username):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
 
-    c.execute('UPDATE Stories SET FullStory=? AND Latest_Update=? WHERE Title=?', (story, new_update, title))
-
-    c.execute("SELECT ID FROM Stories WHERE Title=? AND Latest_Update=?", [title, story])
-    story_id = c.fetchone()[0]
+    c.execute('UPDATE Stories SET FullStory=? AND Latest_Update=? WHERE ID=?', (story, new_update, story_id))
 
     c.execute("SELECT ID FROM Users WHERE Username=?", [username])
     user_id = c.fetchone()[0]
     
-    c.execute('INSERT INTO Contributions VALUES (null, ?, ?, ?)', (story_id, user_id, story))
+    c.execute('INSERT INTO Contributions VALUES (null, ?, ?, ?)', (story_id, user_id, new_update))
 
     db.commit()
     db.close()

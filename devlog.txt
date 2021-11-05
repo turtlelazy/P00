@@ -69,3 +69,6 @@ aryamanG -- 2021-11-4 15:00
 - linked new stories to story and contributions tables 
 - accessed user sessions to store original story id and user id with specific contributions
 - updating database when users add to existing story
+
+aryamanG -- 2021-11-4 21:00
+- fixed add to story function to double check for duplicate stories
