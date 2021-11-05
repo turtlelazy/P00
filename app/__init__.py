@@ -113,7 +113,8 @@ def edit_story(story_id):
 # For viewing a particular story
 @app.route('/<int:story_id>')
 def view_story(story_id):
-    pass
+    title, story = db_builder.view_story(story_id)
+    return render_template('view.html', title=title, story=story)
 
 
 # For handling submission of a new story

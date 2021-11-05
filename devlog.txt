@@ -75,3 +75,6 @@ aryamanG -- 2021-11-4 15:00
 
 aryamanG -- 2021-11-4 21:00
 - fixed add to story function to double check for duplicate stories
+
+owenY -- 2021-11-5 08:00
+- added basic view functionality
