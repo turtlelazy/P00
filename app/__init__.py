@@ -136,10 +136,12 @@ def view_story(story_id):
         username = session['username']
 
         if not db_builder.contributed(story_id, username):
+
             return redirect(url_for('edit_story', story_id=story_id))
 
         else:
-            title, story = db_builder.view_story(story_id)
+
+            title, story, last_update = db_builder.get_story(story_id)
             return render_template('view.html', title=title, story=story)
 
     else:

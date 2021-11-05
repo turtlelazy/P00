@@ -1,3 +1,8 @@
+Remembered Chargers - Lewis Cass, Oscar Wang, Aryman Goenka, Owen Yaggy
+SoftDev
+P00
+2021-10-26
+
 lucasL -- 2021-10-27 21:00
 - Finished up the first iteration of the design document
 - Assigned tentative roles for the group
@@ -69,7 +74,7 @@ owenY -- 2021-11-4 08:00
 - finished new story frontend and backend (without css)
 
 aryamanG -- 2021-11-4 15:00
-- linked new stories to story and contributions tables 
+- linked new stories to story and contributions tables
 - accessed user sessions to store original story id and user id with specific contributions
 - updating database when users add to existing story
 
@@ -78,3 +83,8 @@ aryamanG -- 2021-11-4 21:00
 
 owenY -- 2021-11-5 08:00
 - added basic view functionality
+
+lucasL - 2021-11-5 12:00
+- updated template for main page
+- got backend working for retrieving a story based on id
+- templated methods for getting editable and viewable stories based on username
