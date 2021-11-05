@@ -34,10 +34,16 @@ def dbseteup():
 
 
 def get_contributed_stories(username):
-    pass
 
-def get_editable_stories(username):
-    pass
+    return [(123543, "Title1"), (328543, "Title2")]
+
+def get_non_contrtibuted_stories(username):
+
+    return [(3453, "Title3"), (435636, "Title4")]
+
+def check_if_contributed(story_id):
+
+    return True
 
 
 def signup(username, password):
