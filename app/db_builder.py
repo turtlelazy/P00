@@ -20,23 +20,30 @@ def dbseteup():
     c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
     # run SQL statement
 
-    c.execute("Drop Table if exists Stories")
-    command = "Create Table Stories (ID INTEGER PRIMARY KEY AUTOINCREMENT, Title Text, FullStory Text, Latest_Update Text)"    
+    c.execute("DROP TABLE IF EXISTS Stories")
+    command = "CRATE TABLE Stories (ID INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, FullStory TEXT, Latest_Update TEXT)"
     c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
     # run SQL statement
 
-    c.execute("Drop Table if exists Contributions")
-    command = "Create Table Contributions (ID INTEGER PRIMARY KEY AUTOINCREMENT, UserID INTEGER, StoryID INTEGER, Contribution Text)"    
-    c.execute(command)   
+    c.execute("DROP TABLE IF EXISTS Contributions")
+    command = "CREATE TABLE Contributions (ID INTEGER PRIMARY KEY AUTOINCREMENT, UserID INTEGER, StoryID INTEGER, Contribution TEXT)"
+    c.execute(command)
 
     db.commit() #save changes
     db.close()  #close database
 
 
+def get_contributed_stories(username):
+    pass
+
+def get_editable_stories(username):
+    pass
+
+
 def signup(username, password):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
 
-    c = db.cursor()  
+    c = db.cursor()
 
     ##dbseteup()
 
@@ -45,26 +52,26 @@ def signup(username, password):
 
     if result:
         return(True, "Username already exists")
-    else: 
+    else:
         c.execute('INSERT INTO Users VALUES (null, ?, ?)', (username, password))
-        db.commit() 
-        db.close() 
+        db.commit()
+        db.close()
         return(False, "Welcome")
 
 
 def login(username, password):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
 
-    c = db.cursor()  
-    
+    c = db.cursor()
+
     c.execute("""SELECT Username FROM Users WHERE Username=? AND Password=?""",[username, password])
     result = c.fetchone()
 
     if result:
         ##access this specifc user data
         return(False)
-        
-    else: 
+
+    else:
         return(True)
 
 
@@ -79,12 +86,12 @@ def new_story(title, story, username):
 
     c.execute("SELECT ID FROM Users WHERE Username=?", [username])
     user_id = c.fetchone()[0]
-    
+
     c.execute('INSERT INTO Contributions VALUES (null, ?, ?, ?)', (story_id, user_id, story))
 
     db.commit()
     db.close()
-   
+
 
 def add_story(story_id, story, new_update, username):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
@@ -94,9 +101,8 @@ def add_story(story_id, story, new_update, username):
 
     c.execute("SELECT ID FROM Users WHERE Username=?", [username])
     user_id = c.fetchone()[0]
-    
+
     c.execute('INSERT INTO Contributions VALUES (null, ?, ?, ?)', (story_id, user_id, new_update))
 
     db.commit()
     db.close()
-   
