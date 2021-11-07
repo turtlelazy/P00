@@ -63,7 +63,7 @@ def get_viewable_stories(username):
 
     for row in table:
         if user_id == row[1]:
-            contribution_ids.append((row[2], get_story_title_by_id(row[2])))
+            contribution_ids.append((row[2], get_story(row[2])[0]))
     
     return contribution_ids
 
@@ -80,7 +80,7 @@ def get_editable_stories(username):
     for row in table:
         if row[1] != user_id:
             if not editable_stories.__contains__(row[2]):
-                editable_stories.append((row[2], get_story_title_by_id(row[2])))
+                editable_stories.append((row[2], get_story(row[2])[0]))
     
     return editable_stories
 
