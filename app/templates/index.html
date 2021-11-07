@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <h1>Hello World!</h1>
+    <h1>Hello {{username}}!</h1>
 
     <h2><a href="/new">New Story</a></h2>
     <h2>Add to Stories</h2>
@@ -18,8 +18,8 @@
     </ul>
     <h2>View Full stories</h2>
     <ul>
-        {%for id, title in edtiable%}
-            <li><a href="/{{id}}">{{title}}</a></li>
+        {%for id, title in viewable%}
+            <li><a href="/{{id}}/view">{{title}}</a></li>
         {%endfor%}
     </ul>
 
