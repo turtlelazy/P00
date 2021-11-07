@@ -32,12 +32,54 @@ def dbseteup():
     db.commit() #save changes
     db.close()  #close database
 
+def get_id(username):
+    db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
+    c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
+
+    command = "SELECT * FROM Users"
+    c.execute(command)
+
+    table = c.fetchall()
+
+    for row in table:      #searches for the username in Users
+        if row[1] == username:
+            return row[0]    #returns the User ID of the user
 
 def get_contributed_stories(username):
-    pass
+    db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
+    c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
+
+    contribution_ids = []
+
+    command = "SELECT * FROM Contributions"
+    c.execute(command)
+    
+    table = c.fethcall()
+
+    user_id = get_id(username)
+
+    for row in table:
+        if user_id == row[1]:
+            contribution_ids.append(row[2])
+    
+    return contribution_ids
 
 def get_editable_stories(username):
-    pass
+    db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
+    c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
+    command = "SELECT * FROM Contributions"
+    c.execute(command)
+    table = c.fetchall()
+    user_id = get_id(username)
+
+    editable_stories = []    #stores the IDs of all stories the user has not contributed to
+    for row in table:
+        if row[1] != user_id:
+            editable_stories.append(row[2])
+    
+    return editable_stories
+
+
 
 def get_non_contrtibuted_stories(username):
 
