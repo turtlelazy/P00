@@ -16,7 +16,7 @@ def dbseteup():
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
     c.execute("DROP TABLE IF EXISTS Users")
-    command = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT)"    
+    command = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT)"
     c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
     # run SQL statement
 
@@ -80,14 +80,13 @@ def get_editable_stories(username):
     return editable_stories
 
 
-
-def get_non_contrtibuted_stories(username):
+def get_viewable_stories(username):
 
     return [(3453, "Title3"), (435636, "Title4")]
 
-def check_if_contributed(story_id, username):
+def contributed(story_id, username):
 
-    return True
+    return False
 
 
 def signup(username, password):
@@ -101,12 +100,15 @@ def signup(username, password):
     result = c.fetchone()
 
     if result:
-        return(True, "Username already exists")
+        db.commit()
+        db.close()
+
+        return "Username already exists"
     else:
         c.execute('INSERT INTO Users VALUES (null, ?, ?)', (username, password))
         db.commit()
         db.close()
-        return(False, "Welcome")
+        return ""
 
 
 def login(username, password):
@@ -117,12 +119,15 @@ def login(username, password):
     c.execute("""SELECT Username FROM Users WHERE Username=? AND Password=?""",[username, password])
     result = c.fetchone()
 
+    db.commit()
+    db.close()
+
     if result:
         ##access this specifc user data
-        return(False)
+        return False
 
     else:
-        return(True)
+        return True
 
 
 def new_story(title, story, username):
@@ -157,13 +162,18 @@ def add_story(story_id, story, new_update, username):
     db.commit()
     db.close()
 
-def view_story(story_id):
+def get_story(story_id):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
 
-    c.execute("SELECT Title AND FullStory AND Latest_Update WHERE ID=?", [story_id])
-    Title = c.fetchone()[0]
-    Story = c.fetchone()[1]
-    LatestUpdate = c.fetchone()[2]
+    c.execute("SELECT Title,FullStory,Latest_Update FROM Stories WHERE ID=?", [story_id])
+    entry = c.fetchone()
 
-    return (Title, Story, LatestUpdate)
+    title = entry[0]
+    story = entry[1]
+    latest_update = entry[2]
+
+    db.commit()
+    db.close()
+
+    return (title, story, latest_update)
