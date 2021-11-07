@@ -16,7 +16,7 @@ def dbseteup():
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
     c.execute("DROP TABLE IF EXISTS Users")
-    command = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT)"
+    command = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT)"    
     c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
     # run SQL statement
 
@@ -63,7 +63,7 @@ def get_viewable_stories(username):
 
     for row in table:
         if user_id == row[1]:
-            contribution_ids.append((row[2], get_story(row[2])[0]))
+            contribution_ids.append((row[2], view_story(row[2])[0]))
     
     return contribution_ids
 
@@ -80,7 +80,7 @@ def get_editable_stories(username):
     for row in table:
         if row[1] != user_id:
             if not editable_stories.__contains__(row[2]):
-                editable_stories.append((row[2], get_story(row[2])[0]))
+                editable_stories.append((row[2], view_story(row[2])[0]))
     
     return editable_stories
 
@@ -97,7 +97,7 @@ def signup(username, password):
 
     c = db.cursor()
 
-    # dbseteup()
+    ##dbseteup()
 
     c.execute("""SELECT Username FROM Users WHERE Username=?""",[username])
     result = c.fetchone()
@@ -109,7 +109,7 @@ def signup(username, password):
         c.execute('INSERT INTO Users VALUES (null, ?, ?)', (username, password))
         db.commit()
         db.close()
-        return ""
+        return(False, "Welcome")
 
 
 def login(username, password):
@@ -120,15 +120,12 @@ def login(username, password):
     c.execute("""SELECT Username FROM Users WHERE Username=? AND Password=?""",[username, password])
     result = c.fetchone()
 
-    db.commit()
-    db.close()
-
     if result:
         ##access this specifc user data
-        return False
+        return(False)
 
     else:
-        return True
+        return(True)
 
 
 def new_story(title, story, username):
@@ -163,21 +160,16 @@ def edit_story(story_id, story, new_update, username):
     db.commit()
     db.close()
 
-def get_story(story_id):
+def view_story(story_id):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
 
-    c.execute("SELECT Title,FullStory,Latest_Update FROM Stories WHERE ID=?", [story_id])
-    entry = c.fetchone()
+    c.execute("SELECT Title AND FullStory AND Latest_Update WHERE ID=?", [story_id])
+    Title = c.fetchone()[0]
+    Story = c.fetchone()[1]
+    LatestUpdate = c.fetchone()[2]
 
-    title = entry[0]
-    story = entry[1]
-    latest_update = entry[2]
-
-    db.commit()
-    db.close()
-
-    return (title, story, latest_update)
+    return (Title, Story, LatestUpdate)
 
 # # gets the full story text given a story id
 # def get_story_text(story_id):
