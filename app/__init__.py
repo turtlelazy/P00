@@ -117,7 +117,7 @@ def edit_story(story_id):
 
         username = session['username']
 
-        if db_builder.contributed(story_id, username):
+        if db_builder.has_contributed(story_id, username):
 
             # Can only edit story that was not contributed to
 
@@ -129,14 +129,14 @@ def edit_story(story_id):
         return redirect(url_for('landing'))
 
 # For viewing a particular story
-@app.route('/<int:story_id>')
+@app.route('/<int:story_id>/view')
 def view_story(story_id):
 
     if logged_in():
 
         username = session['username']
 
-        if not db_builder.contributed(story_id, username):
+        if not db_builder.has_contributed(story_id, username):
 
             # Can only view story that was contributed to
             return redirect(url_for('edit_story', story_id=story_id))

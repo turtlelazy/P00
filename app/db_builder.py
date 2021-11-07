@@ -104,12 +104,25 @@ def has_contributed(username, story_id):
     else:
         return False
 
+# gets the full story text given a story id
+def get_story_text(story_id):
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()
+
+    c.execute("SELECT FullStory FROM Stories WHERE ID=?", [story_id])
+    story = c.fetchone()[0]
+
+    db.commit()
+    db.close()
+
+    return story
+
 def signup(username, password):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
 
     c = db.cursor()
 
-    ##dbseteup()
+    # dbseteup()
 
     c.execute("""SELECT Username FROM Users WHERE Username=?""",[username])
     result = c.fetchone()
