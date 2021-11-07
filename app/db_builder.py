@@ -62,8 +62,10 @@ def get_viewable_stories(username):
     user_id = get_id(username)
 
     for row in table:
-        if user_id == row[1]:
-            contribution_ids.append((row[2], view_story(row[2])[0]))
+        uid = row[2]
+        if user_id == uid:
+            story_id = row[1]
+            contribution_ids.append((story_id, get_story_title_by_id(story_id)))
     
     return contribution_ids
 
@@ -78,9 +80,11 @@ def get_editable_stories(username):
 
     editable_stories = []    #stores the IDs of all stories the user has not contributed to
     for row in table:
-        if row[1] != user_id:
-            if not editable_stories.__contains__(row[2]):
-                editable_stories.append((row[2], view_story(row[2])[0]))
+        uid = row[2]
+        if uid != user_id:
+            story_id = row[1]
+            if not editable_stories.__contains__(story_id):
+                editable_stories.append((story_id, get_story_title_by_id(story_id)))
     
     return editable_stories
 
@@ -164,7 +168,7 @@ def view_story(story_id):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
 
-    c.execute("SELECT Title AND FullStory AND Latest_Update WHERE ID=?", [story_id])
+    c.execute("SELECT Title AND FullStory AND Latest_Update FROM Stories WHERE ID=?", [story_id])
     Title = c.fetchone()[0]
     Story = c.fetchone()[1]
     LatestUpdate = c.fetchone()[2]
@@ -184,14 +188,14 @@ def view_story(story_id):
 
 #     return story
 
-# def get_story_title_by_id(story_id):
-#     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
-#     c = db.cursor()
+def get_story_title_by_id(story_id):
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()
 
-#     c.execute("SELECT Title FROM Stories WHERE ID=?", [story_id])
-#     title = c.fetchone()[0]
+    c.execute("SELECT Title FROM Stories WHERE ID=?", [story_id])
+    title = c.fetchone()[0]
 
-#     db.commit()
-#     db.close()
+    db.commit()
+    db.close()
 
-#     return title
+    return title
