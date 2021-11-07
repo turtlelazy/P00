@@ -46,18 +46,6 @@ def get_id(username):
         if row[1] == username:
             return row[0]    #returns the User ID of the user
 
-def get_story_title_by_id(story_id):
-    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
-    c = db.cursor()
-
-    c.execute("SELECT Title FROM Stories WHERE ID=?", [story_id])
-    title = c.fetchone()[0]
-
-    db.commit()
-    db.close()
-
-    return title
-
 # returns a list of story IDs for the stories the user has contributed to
 # same function for all the stories the user can view
 def get_viewable_stories(username):
@@ -103,19 +91,6 @@ def has_contributed(username, story_id):
         return True
     else:
         return False
-
-# gets the full story text given a story id
-def get_story_text(story_id):
-    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
-    c = db.cursor()
-
-    c.execute("SELECT FullStory FROM Stories WHERE ID=?", [story_id])
-    story = c.fetchone()[0]
-
-    db.commit()
-    db.close()
-
-    return story
 
 def signup(username, password):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
@@ -203,3 +178,28 @@ def get_story(story_id):
     db.close()
 
     return (title, story, latest_update)
+
+# # gets the full story text given a story id
+# def get_story_text(story_id):
+#     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+#     c = db.cursor()
+
+#     c.execute("SELECT FullStory FROM Stories WHERE ID=?", [story_id])
+#     story = c.fetchone()[0]
+
+#     db.commit()
+#     db.close()
+
+#     return story
+
+# def get_story_title_by_id(story_id):
+#     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+#     c = db.cursor()
+
+#     c.execute("SELECT Title FROM Stories WHERE ID=?", [story_id])
+#     title = c.fetchone()[0]
+
+#     db.commit()
+#     db.close()
+
+#     return title
