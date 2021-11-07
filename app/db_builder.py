@@ -60,6 +60,7 @@ def signup(username, password):
 
     if result:
         return(True, "Username already exists")
+
     else:
         c.execute('INSERT INTO Users VALUES (null, ?, ?)', (username, password))
         db.commit()
@@ -101,7 +102,7 @@ def new_story(title, story, username):
     db.close()
 
 
-def add_story(story_id, story, new_update, username):
+def edit_story(story_id, story, new_update, username):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
 
