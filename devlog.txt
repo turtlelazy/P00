@@ -101,3 +101,7 @@ oscarW -- 2021-11-6 23:00
 - fixed login to display viewable and editable stories
 - cleaned up database for debugging view and edit
 - added function to get full story text
+
+aryamanG -- 2021-11-7 2:00
+- edited story data retrieval function
+- fixed view_story which allowed users to view already edited stories
