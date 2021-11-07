@@ -32,6 +32,7 @@ def dbseteup():
     db.commit() #save changes
     db.close()  #close database
 
+# gets the user I
 def get_id(username):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
@@ -45,7 +46,21 @@ def get_id(username):
         if row[1] == username:
             return row[0]    #returns the User ID of the user
 
-def get_contributed_stories(username):
+def get_story_title_by_id(story_id):
+    db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+    c = db.cursor()
+
+    c.execute("SELECT Title FROM Stories WHERE ID=?", [story_id])
+    title = c.fetchone()[0]
+
+    db.commit()
+    db.close()
+
+    return title
+
+# returns a list of story IDs for the stories the user has contributed to
+# same function for all the stories the user can view
+def get_viewable_stories(username):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
@@ -54,16 +69,17 @@ def get_contributed_stories(username):
     command = "SELECT * FROM Contributions"
     c.execute(command)
     
-    table = c.fethcall()
+    table = c.fetchall()
 
     user_id = get_id(username)
 
     for row in table:
         if user_id == row[1]:
-            contribution_ids.append(row[2])
+            contribution_ids.append((row[2], get_story_title_by_id(row[2])))
     
     return contribution_ids
 
+# returns a list of story IDs for the stories the user has not contributed to
 def get_editable_stories(username):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
@@ -75,19 +91,18 @@ def get_editable_stories(username):
     editable_stories = []    #stores the IDs of all stories the user has not contributed to
     for row in table:
         if row[1] != user_id:
-            editable_stories.append(row[2])
+            if not editable_stories.__contains__(row[2]):
+                editable_stories.append((row[2], get_story_title_by_id(row[2])))
     
     return editable_stories
 
-
-def get_viewable_stories(username):
-
-    return [(3453, "Title3"), (435636, "Title4")]
-
-def contributed(story_id, username):
-
-    return False
-
+# returns True if the user has contributed to the story and False otherwise
+def has_contributed(username, story_id):
+    contributions = get_viewable_stories(username)
+    if story_id in contributions:
+        return True
+    else:
+        return False
 
 def signup(username, password):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
