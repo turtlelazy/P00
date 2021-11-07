@@ -100,3 +100,4 @@ oscarW -- 2021-11-6 23:00
 - used said functions to get links to the stories on the index page
 - fixed login to display viewable and editable stories
 - cleaned up database for debugging view and edit
+- added function to get full story text
