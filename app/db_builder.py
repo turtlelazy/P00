@@ -175,19 +175,6 @@ def view_story(story_id):
 
     return (Title, Story, LatestUpdate)
 
-# # gets the full story text given a story id
-# def get_story_text(story_id):
-#     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
-#     c = db.cursor()
-
-#     c.execute("SELECT FullStory FROM Stories WHERE ID=?", [story_id])
-#     story = c.fetchone()[0]
-
-#     db.commit()
-#     db.close()
-
-#     return story
-
 def get_story_title_by_id(story_id):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()

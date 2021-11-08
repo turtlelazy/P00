@@ -112,29 +112,32 @@ def logout():
 # For editing a particular story
 @app.route('/<int:story_id>/edit')
 def edit_story(story_id):
-
-    if logged_in():
-
-        username = session['username']
-
-        if db_builder.has_contributed(story_id, username):
-
-            # Can only edit story that was not contributed to
-
-            return redirect(url_for('view_story', story_id=story_id))
-        else:
-            title, story, latest_update = db_builder.view_story(story_id)
-            return render_template('edit.html', latest=latest_update)
-
-    else:
-        return redirect(url_for('landing'))
-
-@app.route('/edit')
-def submit_edit():
     method = request.method
 
     if method == "GET":
-        return redirect(url_for('landing'))
+
+        if logged_in():
+
+            username = session['username']
+
+            if db_builder.has_contributed(story_id, username):
+
+                # Can only edit story that was not contributed to
+
+                return redirect(url_for('view_story', story_id=story_id))
+            else:
+                title, story, latest_update = db_builder.view_story(story_id)
+                return render_template('edit.html', latest=latest_update)
+
+        else:
+            return redirect(url_for('landing'))
+    
+    if method == "POST":
+
+        if logged_in():
+    
+
+
 
 # For viewing a particular story
 @app.route('/<int:story_id>/view')
