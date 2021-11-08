@@ -129,21 +129,22 @@ def edit_story(story_id):
     else:
         return redirect(url_for('landing'))
 
-@app.route('/edit')
-def submit_edit():
-    method = request.method
-
-    if method == "GET":
-        return redirect(url_for('landing'))
-
 # For viewing a particular story
 @app.route('/<int:story_id>')
 def view_story(story_id):
 
     if logged_in():
 
-        title, story, last_update = db_builder.view_story(story_id)
-        return render_template('view.html', title=title, story=story)
+        username = session['username']
+
+        if not db_builder.has_contributed(story_id, username):
+            return redirect(url_for('edit_story', story_id=story_id))
+
+        else:
+
+            title, story, last_update = db_builder.view_story(story_id)
+            return render_template('view.html', title=title, story=story)
+
 
     else:
         return redirect(url_for('landing'))
