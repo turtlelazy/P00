@@ -140,7 +140,7 @@ def edit_story(story_id):
 
 
 # For viewing a particular story
-@app.route('/<int:story_id>/view')
+@app.route('/<int:story_id>')
 def view_story(story_id):
 
     if logged_in():
