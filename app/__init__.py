@@ -26,7 +26,7 @@ def landing():
         viewable_stories = db_builder.get_viewable_stories(username)
         editable_stories = db_builder.get_editable_stories(username)
 
-        return render_template('index.html', username=username,viewable=viewable_stories, edtiable=editable_stories)
+        return render_template('index.html', logged_in=logged_in(), username=username,viewable=viewable_stories, edtiable=editable_stories)
 
     else:
         # If not logged in, show login page
@@ -110,24 +110,50 @@ def logout():
     return redirect(url_for('landing'))
 
 # For editing a particular story
-@app.route('/<int:story_id>/edit')
+@app.route('/<int:story_id>/edit', methods=['GET', 'POST'])
 def edit_story(story_id):
+    method = request.method
 
-    if logged_in():
+    if method == "GET":
 
-        username = session['username']
+        if logged_in():
 
-        if db_builder.has_contributed(story_id, username):
-            # Can only edit story that was not contributed to
-            return redirect(url_for('view_story', story_id=story_id))
+            username = session['username']
+
+            if db_builder.has_contributed(story_id, username):
+
+                # Can only edit story that was not contributed to
+
+                return redirect(url_for('view_story', story_id=story_id))
+            else:
+                title, story, latest_update = db_builder.view_story(story_id)
+                return render_template('edit.html', logged_in=logged_in(), title=title, latest=latest_update)
+
         else:
-            return render_template('edit.html')
+            return redirect(url_for('landing'))
+    
+    # submitting the edit
+    if method == "POST":
 
-    else:
-        return redirect(url_for('landing'))
+        if logged_in():
+
+            username = session['username']
+
+            # gets information on the story from the db
+            story, title, latest_update = db_builder.view_story(story_id)
+            latest_update = request.form["contribution"]
+
+            # submits the edit to the db
+            db_builder.edit_story(story_id, story, latest_update, username)
+
+            return redirect(url_for('landing'))
+
+        else:
+            return redirect(url_for('landing'))
+
 
 # For viewing a particular story
-@app.route('/<int:story_id>/view')
+@app.route('/<int:story_id>')
 def view_story(story_id):
 
     if logged_in():
@@ -144,7 +170,6 @@ def view_story(story_id):
         return redirect(url_for('landing'))
 
 
-
 # For handling submission of a new story
 @app.route('/new', methods=['GET','POST'])
 def add_story():
@@ -152,7 +177,7 @@ def add_story():
     method = request.method
 
     if method == 'GET':
-        return render_template('new.html')
+        return render_template('new.html', logged_in=logged_in())
 
     if method == 'POST':
 
