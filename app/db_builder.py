@@ -16,7 +16,7 @@ def dbseteup():
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
     c.execute("DROP TABLE IF EXISTS Users")
-    command = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT)"    
+    command = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT)"
     c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
     # run SQL statement
 
@@ -56,7 +56,7 @@ def get_viewable_stories(username):
 
     command = "SELECT * FROM Contributions"
     c.execute(command)
-    
+
     table = c.fetchall()
 
     user_id = get_id(username)
@@ -66,7 +66,7 @@ def get_viewable_stories(username):
         if user_id == uid:
             story_id = row[1]
             contribution_ids.append((story_id, get_story_title_by_id(story_id)))
-    
+
     return contribution_ids
 
 # returns a list of story IDs for the stories the user has not contributed to
@@ -85,7 +85,7 @@ def get_editable_stories(username):
             story_id = row[1]
             if not editable_stories.__contains__(story_id):
                 editable_stories.append((story_id, get_story_title_by_id(story_id)))
-    
+
     return editable_stories
 
 # returns True if the user has contributed to the story and False otherwise
@@ -107,13 +107,13 @@ def signup(username, password):
     result = c.fetchone()
 
     if result:
-        return(True, "Username already exists")
+        return "Error: Username already exists"
 
     else:
         c.execute('INSERT INTO Users VALUES (null, ?, ?)', (username, password))
         db.commit()
         db.close()
-        return(False, "Welcome")
+        return  ""
 
 
 def login(username, password):
@@ -168,21 +168,14 @@ def view_story(story_id):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
 
-    c.execute("SELECT Title FROM Stories WHERE ID=?", [story_id])
+    c.execute("SELECT Title, FullStory, Latest_Update FROM Stories WHERE ID=?", [story_id])
     row = c.fetchone()
-    if row is not None:
-        Title = row[0]
 
-    c.execute("SELECT FullStory FROM Stories WHERE ID=?", [story_id])
-    row = c.fetchone()
-    if row is not None:
-        Story = row[0]
 
-    c.execute("SELECT Latest_Update FROM Stories WHERE ID=?", [story_id])
-    row = c.fetchone()
-    if row is not None:
-        LatestUpdate = row[0]
-    
+    Title = row[0]
+    Story = row[1]
+    LatestUpdate = row[2]
+
     return (Title, Story, LatestUpdate)
 
 def get_story_title_by_id(story_id):
