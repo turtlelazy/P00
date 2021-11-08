@@ -26,7 +26,7 @@ def landing():
         viewable_stories = db_builder.get_viewable_stories(username)
         editable_stories = db_builder.get_editable_stories(username)
 
-        return render_template('index.html', username=username,viewable=viewable_stories, edtiable=editable_stories)
+        return render_template('index.html', logged_in=logged_in(), username=username,viewable=viewable_stories, edtiable=editable_stories)
 
     else:
         # If not logged in, show login page
@@ -127,7 +127,7 @@ def edit_story(story_id):
                 return redirect(url_for('view_story', story_id=story_id))
             else:
                 title, story, latest_update = db_builder.view_story(story_id)
-                return render_template('edit.html', title=title, latest=latest_update)
+                return render_template('edit.html', logged_in=logged_in(), title=title, latest=latest_update)
 
         else:
             return redirect(url_for('landing'))
@@ -166,7 +166,7 @@ def view_story(story_id):
         else:
 
             title, story, last_update = db_builder.view_story(story_id)
-            return render_template('view.html', title=title, story=story)
+            return render_template('view.html', logged_in=logged_in(), title=title, story=story)
 
 
     else:
@@ -180,7 +180,7 @@ def add_story():
     method = request.method
 
     if method == 'GET':
-        return render_template('new.html')
+        return render_template('new.html', logged_in=logged_in())
 
     if method == 'POST':
 
