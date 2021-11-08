@@ -110,7 +110,7 @@ def logout():
     return redirect(url_for('landing'))
 
 # For editing a particular story
-@app.route('/<int:story_id>/edit')
+@app.route('/<int:story_id>/edit', methods=['GET', 'POST'])
 def edit_story(story_id):
     method = request.method
 
@@ -141,12 +141,12 @@ def edit_story(story_id):
 
             # gets information on the story from the db
             story, title, latest_update = db_builder.view_story(story_id)
-            latest_update = request.form("contribution")
+            latest_update = request.form["contribution"]
 
             # submits the edit to the db
             db_builder.edit_story(story_id, story, latest_update, username)
 
-            return render_template("index.html")
+            return redirect(url_for('landing'))
 
         else:
             return redirect(url_for('landing'))
