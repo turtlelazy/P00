@@ -127,16 +127,29 @@ def edit_story(story_id):
                 return redirect(url_for('view_story', story_id=story_id))
             else:
                 title, story, latest_update = db_builder.view_story(story_id)
-                return render_template('edit.html', latest=latest_update)
+                return render_template('edit.html', title=title, latest=latest_update)
 
         else:
             return redirect(url_for('landing'))
     
+    # submitting the edit
     if method == "POST":
 
         if logged_in():
-    
 
+            username = session['username']
+
+            # gets information on the story from the db
+            story, title, latest_update = db_builder.view_story(story_id)
+            latest_update = request.form("contribution")
+
+            # submits the edit to the db
+            db_builder.edit_story(story_id, story, latest_update, username)
+
+            return render_template("index.html")
+
+        else:
+            return redirect(url_for('landing'))
 
 
 # For viewing a particular story

@@ -6,13 +6,13 @@
 </head>
 <body>
     <h1>Story Editing</h1>
-    <h3>You have chosen to edit a story that currently ends as follows:</h3>
+    <h3>You have chosen to edit the story titled "{{title}}" which currently ends as follows:</h3>
     <p>
         {{ latest }}
     </p>
     <h3>Please enter your update to the story below:</h3>
     <form action="/edit" method="POST"> <!--- sends a get request to /_____ -->
-        <textarea name="text1" cols="40" rows="5"></textarea>
+        <textarea name="contribution" cols="40" rows="5"></textarea>
         <br>
         <input type="submit" name="sub1">
     </form>
