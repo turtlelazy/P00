@@ -123,9 +123,17 @@ def edit_story(story_id):
 
             return redirect(url_for('view_story', story_id=story_id))
         else:
-            return render_template('edit.html')
+            title, story, latest_update = db_builder.view_story(story_id)
+            return render_template('edit.html', latest=latest_update)
 
     else:
+        return redirect(url_for('landing'))
+
+@app.route('/edit')
+def submit_edit():
+    method = request.method
+
+    if method == "GET":
         return redirect(url_for('landing'))
 
 # For viewing a particular story
@@ -139,7 +147,6 @@ def view_story(story_id):
 
     else:
         return redirect(url_for('landing'))
-
 
 
 # For handling submission of a new story

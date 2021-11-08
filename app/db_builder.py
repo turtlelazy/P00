@@ -168,22 +168,25 @@ def view_story(story_id):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
 
-    c.execute("SELECT Title FROM Stories WHERE ID=?", [story_id])
-    row = c.fetchone()
-    if row is not None:
-        Title = row[0]
+    c.execute("SELECT Title AND FullStory AND Latest_Update FROM Stories WHERE ID=?", [story_id])
+    Title = c.fetchone()[0]
+    Story = c.fetchone()[1]
+    LatestUpdate = c.fetchone()[2]
 
-    c.execute("SELECT FullStory FROM Stories WHERE ID=?", [story_id])
-    row = c.fetchone()
-    if row is not None:
-        Story = row[0]
-
-    c.execute("SELECT Latest_Update FROM Stories WHERE ID=?", [story_id])
-    row = c.fetchone()
-    if row is not None:
-        LatestUpdate = row[0]
-    
     return (Title, Story, LatestUpdate)
+
+# # gets the full story text given a story id
+# def get_story_text(story_id):
+#     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
+#     c = db.cursor()
+
+#     c.execute("SELECT FullStory FROM Stories WHERE ID=?", [story_id])
+#     story = c.fetchone()[0]
+
+#     db.commit()
+#     db.close()
+
+#     return story
 
 def get_story_title_by_id(story_id):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
