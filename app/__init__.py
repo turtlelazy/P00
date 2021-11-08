@@ -118,9 +118,7 @@ def edit_story(story_id):
         username = session['username']
 
         if db_builder.has_contributed(story_id, username):
-
             # Can only edit story that was not contributed to
-
             return redirect(url_for('view_story', story_id=story_id))
         else:
             return render_template('edit.html')
@@ -133,10 +131,15 @@ def edit_story(story_id):
 def view_story(story_id):
 
     if logged_in():
+        
+        username = session['username']
 
-        title, story, last_update = db_builder.view_story(story_id)
-        return render_template('view.html', title=title, story=story)
+        if db_builder.has_contributed(story_id, username):
 
+            title, story = db_builder.view_story(story_id)
+            return render_template('view.html', title=title, story=story)
+        else: 
+            return redirect(url_for('edit_story', story_id=story_id))
     else:
         return redirect(url_for('landing'))
 
