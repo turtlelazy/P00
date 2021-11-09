@@ -107,7 +107,7 @@ def signup(username, password):
 
     c = db.cursor()
 
-    ##dbseteup()
+    # dbseteup()
 
     c.execute("""SELECT Username FROM Users WHERE Username=?""",[username])
     result = c.fetchone()

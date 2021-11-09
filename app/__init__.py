@@ -222,6 +222,6 @@ def not_found(e):
     return render_template('404.html'), 404
 
 if __name__ == '__main__':
-    # db_builder.dbseteup()
+    db_builder.dbseteup()
     app.debug = True
     app.run()
