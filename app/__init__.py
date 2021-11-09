@@ -143,7 +143,7 @@ def edit_story(story_id):
             title, story, _ = db_builder.get_story(story_id)
 
             latest_update = request.form["contribution"]
-            story += "\n" + latest_update
+            story += "<br>" + latest_update
 
             # submits the edit to the db
             db_builder.edit_story(story_id, story, latest_update, username)

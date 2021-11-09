@@ -54,48 +54,48 @@ def split_viewable_stories(username):
     return (viewable_story_list, editable_story_list)
 
 
-def get_viewable_stories(username):
-    db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
-    c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
-
-    user_id = get_id(username)
-    c.execute("SELECT StoryID FROM Contributions WHERE UserID=?", [user_id])
-
-    story_id_list = [entry[0] for entry in c.fetchall()]
-    story_id_set = set(story_id_list)
-
-    story_list = []
-    for story_id in story_id_set:
-        story_list.append((story_id, get_story_title_by_id(story_id)))
-
-    db.commit() #save changes
-    db.close()  #close database
-
-    return story_list
-
-# returns a list of story IDs for the stories the user has not contributed to
-def get_editable_stories(username):
-    db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
-    c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
-
-    user_id = get_id(username)
-    c.execute("SELECT StoryID FROM Contributions WHERE UserID!=?", [user_id])
-
-    story_id_list = [entry[0] for entry in c.fetchall()]
-    story_id_set = set(story_id_list)
-
-    story_list = []
-    for story_id in story_id_set:
-        story_list.append((story_id, get_story_title_by_id(story_id)))
-
-    db.commit() #save changes
-    db.close()  #close database
-
-    return story_list
+# def get_viewable_stories(username):
+#     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
+#     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
+#
+#     user_id = get_id(username)
+#     c.execute("SELECT StoryID FROM Contributions WHERE UserID=?", [user_id])
+#
+#     story_id_list = [entry[0] for entry in c.fetchall()]
+#     story_id_set = set(story_id_list)
+#
+#     story_list = []
+#     for story_id in story_id_set:
+#         story_list.append((story_id, get_story_title_by_id(story_id)))
+#
+#     db.commit() #save changes
+#     db.close()  #close database
+#
+#     return story_list
+#
+# # returns a list of story IDs for the stories the user has not contributed to
+# def get_editable_stories(username):
+#     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
+#     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
+#
+#     user_id = get_id(username)
+#     c.execute("SELECT StoryID FROM Contributions WHERE UserID!=?", [user_id])
+#
+#     story_id_list = [entry[0] for entry in c.fetchall()]
+#     story_id_set = set(story_id_list)
+#
+#     story_list = []
+#     for story_id in story_id_set:
+#         story_list.append((story_id, get_story_title_by_id(story_id)))
+#
+#     db.commit() #save changes
+#     db.close()  #close database
+#
+#     return story_list
 
 # returns True if the user has contributed to the story and False otherwise
 def has_contributed(story_id, username):
-    contributions = get_viewable_stories(username)
+    contributions, _ = split_viewable_stories(username)
 
     if story_id in [entry[0] for entry in contributions]:
         return True
