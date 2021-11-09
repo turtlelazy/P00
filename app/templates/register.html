@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-    <link rel="stylesheet" type="text/css" href="app/styles/stylesheet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/stylesheet.css') }}">
     <ul class="nav">
         {% if logged_in %}
             <li class="nav"><a class="nav" href="/">Home</a></li>
