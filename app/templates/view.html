@@ -5,6 +5,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/stylesheet.css') }}">
     <meta charset="UTF-8">
     <title>View Story</title>
+    <ul class="nav">
+        {% if logged_in %}
+            <li class="nav"><a class="nav" href="/">Home</a></li>
+            <li class="nav"><a class="nav" href="/logout">Logout</a></li>
+        {% else %}
+            <li class="nav"><a class="nav" href="/">Home</a></li>
+            <li class="nav"><a class="nav" href="/login">Login</a></li>
+            <li class="nav"><a class="nav" href="/register">Register</a></li>
+        {% endif %}
+    </ul>
 </head>
 
 <body>

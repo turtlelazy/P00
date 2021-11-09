@@ -143,7 +143,7 @@ def edit_story(story_id):
             title, story, _ = db_builder.get_story(story_id)
 
             latest_update = request.form["contribution"]
-            story += "\n" + latest_update
+            story += "\n\n" + latest_update
 
             # submits the edit to the db
             db_builder.edit_story(story_id, story, latest_update, username)
@@ -166,7 +166,7 @@ def view_story(story_id):
 
             title, story, _ = db_builder.get_story(story_id)
             print(story)
-            return render_template('view.html', title=title, story=story)
+            return render_template('view.html', title=title, story=story, logged_in=logged_in())
         else:
             return redirect(url_for('edit_story', story_id=story_id))
     else:
