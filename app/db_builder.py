@@ -38,42 +38,49 @@ def get_viewable_stories(username):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
-    contribution_ids = []
     user_id = get_id(username)
+    c.execute("SELECT StoryID FROM Contributions WHERE UserID=?", [user_id])
 
-    table = c.execute("SELECT * FROM Contributions")
+    story_id_list = [entry[0] for entry in c.fetchall()]
+    story_id_set = set(story_id_list)
 
-    for row in table:
-        story_id = row[1]
-        if row[2] == user_id:
-            contribution_ids.append((story_id, get_story_title_by_id(story_id)))
-    return contribution_ids
+    story_list = []
+    for story_id in story_id_set:
+        story_list.append((story_id, get_story_title_by_id(story_id)))
+
+    db.commit() #save changes
+    db.close()  #close database
+
+    return story_list
 
 # returns a list of story IDs for the stories the user has not contributed to
 def get_editable_stories(username):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
-    c = db.cursor()  #facilitate db ops -- you will use cursor to trigger db events
+    c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
-    editable_stories = []    #stores the IDs of all stories the user has not contributed to
     user_id = get_id(username)
+    c.execute("SELECT StoryID FROM Contributions WHERE UserID!=?", [user_id])
 
-    table = c.execute("SELECT * FROM Contributions")
+    story_id_list = [entry[0] for entry in c.fetchall()]
+    story_id_set = set(story_id_list)
 
-    for row in table:
-        story_id = row[1]
-        if row[2] != user_id:
-            editable_stories.append((story_id, get_story_title_by_id(story_id)))
-    return editable_stories
+    story_list = []
+    for story_id in story_id_set:
+        story_list.append((story_id, get_story_title_by_id(story_id)))
+
+    db.commit() #save changes
+    db.close()  #close database
+
+    return story_list
 
 # returns True if the user has contributed to the story and False otherwise
 def has_contributed(story_id, username):
     contributions = get_viewable_stories(username)
-    print(contributions)
-    for row in contributions:
-        if story_id == row[0]:
-            return True
-        else:
-            return False
+
+    if story_id in [entry[0] for entry in contributions]:
+        return True
+    else:
+        return False
 
 def signup(username, password):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
@@ -123,7 +130,7 @@ def new_story(title, story, username):
     c.execute("SELECT ID FROM Users WHERE Username=?", [username])
     user_id = c.fetchone()[0]
 
-    c.execute('INSERT INTO Contributions VALUES (null, ?, ?, ?)', (story_id, user_id, story))
+    c.execute('INSERT INTO Contributions VALUES (null, ?, ?, ?)', (user_id, story_id, story))
 
     db.commit()
     db.close()
@@ -138,26 +145,28 @@ def edit_story(story_id, story, new_update, username):
     c.execute("SELECT ID FROM Users WHERE Username=?", [username])
     user_id = c.fetchone()[0]
 
-    c.execute('INSERT INTO Contributions VALUES (null, ?, ?, ?)', (story_id, user_id, new_update))
+    c.execute('INSERT INTO Contributions VALUES (null, ?, ?, ?)', (user_id, story_id, new_update))
 
     db.commit()
     db.close()
 
-def view_story(story_id):
+def get_story(story_id):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
 
     c.execute("SELECT Title, FullStory, Latest_Update FROM Stories WHERE ID=?", [story_id])
-    row = c.fetchone()
-    if row is not None:
-        Title = row[0]
 
-    c.execute("SELECT FullStory FROM Stories WHERE ID=?", [story_id])
     row = c.fetchone()
-    if row is not None:
-        Story = row[0]
-    
-    return (Title, Story)
+
+    title = row[0]
+    full_story = row[1]
+    latest_update = row[2]
+
+    db.commit()
+    db.close()
+
+
+    return title, full_story, latest_update
 
 def get_story_title_by_id(story_id):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create

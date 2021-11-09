@@ -126,12 +126,13 @@ def edit_story(story_id):
 
                 return redirect(url_for('view_story', story_id=story_id))
             else:
-                title, story, latest_update = db_builder.view_story(story_id)
-                return render_template('edit.html', logged_in=logged_in(), title=title, latest=latest_update)
+                title, story, latest_update = db_builder.get_story(story_id)
+
+                return render_template('edit.html', story_id=story_id, title=title, latest=latest_update)
 
         else:
             return redirect(url_for('landing'))
-    
+
     # submitting the edit
     if method == "POST":
 
@@ -140,7 +141,7 @@ def edit_story(story_id):
             username = session['username']
 
             # gets information on the story from the db
-            story, title, latest_update = db_builder.view_story(story_id)
+            story, title, latest_update = db_builder.get_story(story_id)
             latest_update = request.form["contribution"]
 
             # submits the edit to the db
@@ -157,14 +158,14 @@ def edit_story(story_id):
 def view_story(story_id):
 
     if logged_in():
-        
+
         username = session['username']
 
         if db_builder.has_contributed(story_id, username):
 
-            title, story = db_builder.view_story(story_id)
+            title, story, _ = db_builder.get_story(story_id)
             return render_template('view.html', title=title, story=story)
-        else: 
+        else:
             return redirect(url_for('edit_story', story_id=story_id))
     else:
         return redirect(url_for('landing'))
@@ -219,5 +220,6 @@ def not_found(e):
     return render_template('404.html'), 404
 
 if __name__ == '__main__':
+    # db_builder.dbseteup()
     app.debug = True
     app.run()

@@ -27,14 +27,8 @@
 </style>
 <head>
     <ul class="nav">
-        {% if logged_in %}
-            <li class="nav"><a class="nav" href="/">Home</a></li>
-            <li class="nav"><a class="nav" href="/logout">Logout</a></li>
-        {% else %}
-            <li class="nav"><a class="nav" href="/">Home</a></li>
-            <li class="nav"><a class="nav" href="/login">Login</a></li>
-            <li class="nav"><a class="nav" href="/register">Register</a></li>
-        {% endif %}
+        <li class="nav"><a class="nav" href="/">Home</a></li>
+        <li class="nav"><a class="nav" href="/logout">Logout</a></li>
     </ul>
     <meta charset="UTF-8">
     <title>Edit Page</title>
@@ -46,7 +40,7 @@
         {{ latest }}
     </p>
     <h3>Please enter your update to the story below:</h3>
-    <form action="/edit" method="POST"> <!--- sends a get request to /_____ -->
+    <form action="/{{ story_id }}/edit" method="POST"> <!--- sends a get request to /_____ -->
         <textarea name="contribution" cols="40" rows="5"></textarea>
         <br>
         <input type="submit" name="sub1">

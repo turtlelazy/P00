@@ -7,13 +7,13 @@
 </head>
 
 <body>
-    {% if error %}
-    <p style="color: red">Sorry, username or password incorrect</p>
-    {% endif %}
     <center>
         <h1>Login</h1>
     </center>
     <center>
+        {% if error %}
+        <p style="color: red">Sorry, username or password incorrect</p>
+        {% endif %}
         <div>
             <form method="post" action="/login">
                 <input type="text" name="username" placeholder="Username">
