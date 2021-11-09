@@ -23,8 +23,7 @@ def landing():
 
         username = session['username']
 
-        viewable_stories = db_builder.get_viewable_stories(username)
-        editable_stories = db_builder.get_editable_stories(username)
+        viewable_stories, editable_stories = db_builder.split_viewable_stories(username)
 
         return render_template('index.html', logged_in=logged_in(), username=username,viewable=viewable_stories, edtiable=editable_stories)
 
@@ -141,8 +140,10 @@ def edit_story(story_id):
             username = session['username']
 
             # gets information on the story from the db
-            story, title, latest_update = db_builder.get_story(story_id)
+            title, story, _ = db_builder.get_story(story_id)
+
             latest_update = request.form["contribution"]
+            story += "\n" + latest_update
 
             # submits the edit to the db
             db_builder.edit_story(story_id, story, latest_update, username)
@@ -164,6 +165,7 @@ def view_story(story_id):
         if db_builder.has_contributed(story_id, username):
 
             title, story, _ = db_builder.get_story(story_id)
+            print(story)
             return render_template('view.html', title=title, story=story)
         else:
             return redirect(url_for('edit_story', story_id=story_id))

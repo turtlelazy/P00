@@ -32,46 +32,26 @@ def dbseteup():
     db.commit() #save changes
     db.close()  #close database
 
-# returns a list of story IDs for the stories the user has contributed to
-# same function for all the stories the user can view
-def get_viewable_stories(username):
+
+def split_viewable_stories(username):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
+
+    c.execute("SELECT ID FROM Stories")
+    all_story_ids = set([entry[0] for entry in c.fetchall()])
 
     user_id = get_id(username)
     c.execute("SELECT StoryID FROM Contributions WHERE UserID=?", [user_id])
+    contributed_story_id_set = set([entry[0] for entry in c.fetchall()])
 
-    story_id_list = [entry[0] for entry in c.fetchall()]
-    story_id_set = set(story_id_list)
+    viewable_story_list = [(story_id, get_story_title_by_id(story_id)) for story_id in contributed_story_id_set]
+    editable_story_list = [(story_id, get_story_title_by_id(story_id)) for story_id in all_story_ids.difference(contributed_story_id_set)]
 
-    story_list = []
-    for story_id in story_id_set:
-        story_list.append((story_id, get_story_title_by_id(story_id)))
 
     db.commit() #save changes
     db.close()  #close database
 
-    return story_list
-
-# returns a list of story IDs for the stories the user has not contributed to
-def get_editable_stories(username):
-    db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
-    c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
-
-    user_id = get_id(username)
-    c.execute("SELECT StoryID FROM Contributions WHERE UserID!=?", [user_id])
-
-    story_id_list = [entry[0] for entry in c.fetchall()]
-    story_id_set = set(story_id_list)
-
-    story_list = []
-    for story_id in story_id_set:
-        story_list.append((story_id, get_story_title_by_id(story_id)))
-
-    db.commit() #save changes
-    db.close()  #close database
-
-    return story_list
+    return (viewable_story_list, editable_story_list)
 
 # returns True if the user has contributed to the story and False otherwise
 def has_contributed(story_id, username):
@@ -140,11 +120,10 @@ def edit_story(story_id, story, new_update, username):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
 
-    c.execute('UPDATE Stories SET FullStory=? AND Latest_Update=? WHERE ID=?', (story, new_update, story_id))
+    c.execute('UPDATE Stories SET FullStory=?, Latest_Update=? WHERE ID=?', [story, new_update, story_id])
 
-    c.execute("SELECT ID FROM Users WHERE Username=?", [username])
-    user_id = c.fetchone()[0]
 
+    user_id = get_id(username)
     c.execute('INSERT INTO Contributions VALUES (null, ?, ?, ?)', (user_id, story_id, new_update))
 
     db.commit()
