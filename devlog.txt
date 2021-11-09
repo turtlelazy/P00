@@ -106,8 +106,16 @@ aryamanG -- 2021-11-7 02:00
 - edited story data retrieval function
 - fixed view_story which allowed users to view already edited stories
 
+oscarW -- 2021-11-8 8:00
+- started stylesheet file
+- reformatted get functions for stories
+
 lucasL -- 2021-11-8 21:30
 - fixed issue with inserting contributions with data in the wrong order
 - consolidated the get view and edit story methods using sets of story_ids
 - got stories on the main page in the correct locations and their routes appropriately liked based on contribution status
 - made sure that editing stories properly appends the update to the story and replaces the update currently stored in the database
+
+oscarW -- 2021-11-9 14:28
+- fixed new line not showing in view
+- connected extrernal stylesheet to HTML

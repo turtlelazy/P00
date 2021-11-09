@@ -143,7 +143,7 @@ def edit_story(story_id):
             title, story, _ = db_builder.get_story(story_id)
 
             latest_update = request.form["contribution"]
-            story += "<br>" + latest_update
+            story += "\n" + latest_update
 
             # submits the edit to the db
             db_builder.edit_story(story_id, story, latest_update, username)
@@ -222,6 +222,6 @@ def not_found(e):
     return render_template('404.html'), 404
 
 if __name__ == '__main__':
-    db_builder.dbseteup()
+    # db_builder.dbseteup()
     app.debug = True
     app.run()
