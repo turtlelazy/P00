@@ -138,17 +138,47 @@ def edit_story(story_id):
         if logged_in():
 
             username = session['username']
+            if db_builder.has_contributed(story_id, username):
+                print("User has contributed to this story.")
+
+                # Can only edit story that was not contributed to
+
+                return redirect(url_for('view_story', story_id=story_id))
 
             # gets information on the story from the db
-            title, story, _ = db_builder.get_story(story_id)
+            title, story, previous_update = db_builder.get_story(story_id)
 
             latest_update = request.form["contribution"]
             story += "\n\n" + latest_update
 
-            # submits the edit to the db
-            db_builder.edit_story(story_id, story, latest_update, username)
+            confirm = request.form['submit']
 
-            return redirect(url_for('landing'))
+            if confirm == "Confirm":
+                # submits the edit to the db
+                db_builder.edit_story(story_id, story, latest_update, username)
+
+                return redirect(url_for('landing'))
+
+            error_message = ""
+            if not latest_update:
+                error_message = "You cannot have an empty update."
+
+            print(error_message)
+            if error_message:
+                return render_template(
+                    'edit.html',
+                    title=title,
+                    latest_update=latest_update,
+                    story_id=story_id
+                )
+            return render_template(
+                'confirm_edit.html',
+                title=title,
+                latest_update=latest_update,
+                previous_update=previous_update,
+                story_id=story_id
+            )
+
 
         else:
             return redirect(url_for('landing'))
