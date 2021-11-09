@@ -1,37 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<head>
-    <link rel="stylesheet" type="text/css" href="app/styles/stylesheet.css">
-    <meta charset="utf-8">
-    <title>Welcome!</title>
-    <ul class="nav">
-        {% if logged_in %}
-            <li class="nav"><a class="nav" href="/">Home</a></li>
-            <li class="nav"><a class="nav" href="/logout">Logout</a></li>
-        {% else %}
-            <li class="nav"><a class="nav" href="/">Home</a></li>
-            <li class="nav"><a class="nav" href="/login">Login</a></li>
-            <li class="nav"><a class="nav" href="/register">Register</a></li>
-        {% endif %}
-    </ul>
-</head>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/stylesheet.css') }}">
+        <meta charset="utf-8">
+        <title>Welcome!</title>
+        <ul class="nav">
+            {% if logged_in %}
+                <li class="nav"><a class="nav" href="/">Home</a></li>
+                <li class="nav"><a class="nav" href="/logout">Logout</a></li>
+            {% else %}
+                <li class="nav"><a class="nav" href="/">Home</a></li>
+                <li class="nav"><a class="nav" href="/login">Login</a></li>
+                <li class="nav"><a class="nav" href="/register">Register</a></li>
+            {% endif %}
+        </ul>
+    </head>
 
-<body>
-    <h1>Hello {{username}}!</h1>
+    <body>
+        <h1>Hello {{username}}!</h1>
 
-    <h2><a href="/new">New Story</a></h2>
-    <h2>Add to Stories</h2>
-    <ul>
-        {%for id, title in edtiable%}
-            <li><a href="/{{id}}/edit">{{title}}</a></li>
-        {%endfor%}
-    </ul>
-    <h2>View Full stories</h2>
-    <ul>
-        {%for id, title in viewable%}
-            <li><a href="/{{id}}">{{title}}</a></li>
-        {%endfor%}
-    </ul>
-</body>
-
+        <h2><a href="/new">New Story</a></h2>
+        <h2>Add to Stories</h2>
+        <ul>
+            {%for id, title in edtiable%}
+                <li><a href="/{{id}}/edit">{{title}}</a></li>
+            {%endfor%}
+        </ul>
+        <h2>View Full stories</h2>
+        <ul>
+            {%for id, title in viewable%}
+                <li><a href="/{{id}}">{{title}}</a></li>
+            {%endfor%}
+        </ul>
+    </body>
 </html>
