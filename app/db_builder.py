@@ -8,6 +8,7 @@ time spent: 0.5
 
 import sqlite3   #enable control of an sqlite database
 import csv       #facilitate CSV I/O
+import werkzeug.security
 
 DB_FILE="StoryCharger.db"
 
