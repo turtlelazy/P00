@@ -1,31 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<style>
-    ul.nav {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: #333;
-    }
-
-    li.nav {
-        float: left;
-    }
-
-    li a.nav{
-        display: block;
-        color: white;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-    }
-
-    li a.nav:hover {
-        background-color: #111;
-    }
-</style>
 <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/stylesheet.css') }}">
     <ul class="nav">
         <li class="nav"><a class="nav" href="/">Home</a></li>
         <li class="nav"><a class="nav" href="/logout">Logout</a></li>
@@ -41,7 +17,7 @@
     </p>
     <h3>Please enter your update to the story below:</h3>
     <form action="/{{ story_id }}/edit" method="POST"> <!--- sends a get request to /_____ -->
-        <textarea name="contribution" cols="40" rows="5"></textarea>
+        <textarea name="contribution" cols="40" rows="5">{% if latest_update %}{{ latest_update }}{% endif %}</textarea>
         <br>
         <input type="submit" name="sub1">
     </form>

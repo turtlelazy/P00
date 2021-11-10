@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/stylesheet.css') }}">
+    <ul class="nav">
+        <li class="nav"><a class="nav" href="/">Home</a></li>
+        <li class="nav"><a class="nav" href="/logout">Logout</a></li>
+    </ul>
+    <meta charset="UTF-8">
+    <title>Edit Page</title>
+</head>
+
+<body>
+    <p>Press <b>confirm</b> to confirm that you would like to edit this story</p>
+    <p>Need to make changes? Use your browser's <b>back</b> button.</p>
+    <h2>{{ title }}</h2>
+    <p><b>Last Update:</b></p>
+    <p>{{ previous_update }}</p>
+    <p><b>Your Update:</b></p>
+    <p>{{ latest_update }}</p>
+    <form action="/{{ story_id }}/edit" method="post">
+        <input type="hidden" name="title" value="{{ title }}">
+        <input type="hidden" name="contribution" value="{{ latest_update }}">
+        <input type="submit" name="submit" value="Confirm">
+    </form>
+</body>
+
+</html>
