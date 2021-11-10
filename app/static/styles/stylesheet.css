@@ -35,8 +35,7 @@ li.story {
     float: none;
     background-color: azure;
     margin-top: 10px;
-    width: 50vw;
-    margin-left: 25vw;
+    width: 250px;
     overflow-wrap: break-word;
     word-wrap: break-word;
 }
@@ -62,7 +61,25 @@ input.search {
     margin-top: 12px;
 }
 
+div.story {
+    float:left;
+}
+
 .story-text {
     overflow-wrap: break-word;
     word-wrap: break-word;
+}
+
+.newstory {
+    color: black;
+    text-decoration: none;
+    size: fit-content;
+    border: 1px solid black;
+    border-radius: 80%;
+    padding: 20px;
+    background-color: bisque;
+}
+
+.newstory:hover {
+    background-color: moccasin;
 }
