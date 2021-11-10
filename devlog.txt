@@ -106,7 +106,7 @@ aryamanG -- 2021-11-7 02:00
 - edited story data retrieval function
 - fixed view_story which allowed users to view already edited stories
 
-oscarW -- 2021-11-8 8:00
+oscarW -- 2021-11-8 08:00
 - started stylesheet file
 - reformatted get functions for stories
 
@@ -121,7 +121,11 @@ oscarW -- 2021-11-9 14:28
 - connected extrernal stylesheet to HTML
 
 owenY -- 2021-11-9 14:45
-- finished edit confirmation page
+- finished edit confirmation process
+- created confirm edit page
+
+owenY -- 2021-11-10 08:00
+- refactored edit page backend variables to fix bug
 
 lucasL -- 2021-11-10 08:30
 - got search bar working
