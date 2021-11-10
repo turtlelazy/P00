@@ -16,16 +16,25 @@ app.secret_key = 'forgotten charger'
 def logged_in():
     return session.get('username') is not None
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET', 'POST'])
 def landing():
     # Check for session existance
     if logged_in():
 
         username = session['username']
 
+
         viewable_stories, editable_stories = db_builder.split_viewable_stories(username)
 
-        return render_template('index.html', logged_in=logged_in(), username=username,viewable=viewable_stories, edtiable=editable_stories)
+        filter=""
+        if request.method == "POST":
+            filter = request.form["search"]
+
+            viewable_stories = [(id, title) for id, title in viewable_stories if filter.lower() in title.lower()]
+            editable_stories = [(id, title) for id, title in editable_stories if filter.lower() in title.lower()]
+
+        return render_template('index.html', username=username, viewable=viewable_stories, edtiable=editable_stories, search=filter)
+
 
     else:
         # If not logged in, show login page
@@ -196,7 +205,7 @@ def view_story(story_id):
 
             title, story, _ = db_builder.get_story(story_id)
             print(story)
-            return render_template('view.html', title=title, story=story, logged_in=logged_in())
+            return render_template('view.html', title=title, story=story)
         else:
             return redirect(url_for('edit_story', story_id=story_id))
     else:
@@ -210,7 +219,7 @@ def add_story():
     method = request.method
 
     if method == 'GET':
-        return render_template('new.html', logged_in=logged_in())
+        return render_template('new.html')
 
     if method == 'POST':
 
