@@ -32,19 +32,26 @@ def dbseteup():
     db.commit() #save changes
     db.close()  #close database
 
-
+# Returns a list of viewable stories and editable stories
 def split_viewable_stories(username):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
 
+    # Gets a set of all storyIDs
     c.execute("SELECT ID FROM Stories")
     all_story_ids = set([entry[0] for entry in c.fetchall()])
 
     user_id = get_id(username)
     c.execute("SELECT StoryID FROM Contributions WHERE UserID=?", [user_id])
+
+    # Uses a set since there are many contributions to each story
     contributed_story_id_set = set([entry[0] for entry in c.fetchall()])
 
+    # Viewable stories are those the user has contributed to
+    # Editable ones are the existing stories removing the viewable ones
+    # Each is a list of tuples containing story_ids and their associated story title
     viewable_story_list = [(story_id, get_story_title_by_id(story_id)) for story_id in contributed_story_id_set]
+
     editable_story_list = [(story_id, get_story_title_by_id(story_id)) for story_id in all_story_ids.difference(contributed_story_id_set)]
 
 
@@ -97,17 +104,19 @@ def split_viewable_stories(username):
 def has_contributed(story_id, username):
     contributions, _ = split_viewable_stories(username)
 
+    # Each entry is a tuple containing story_id and its associated title
+    # Entry[0] is thus the story id
     if story_id in [entry[0] for entry in contributions]:
         return True
     else:
         return False
 
+# Adds to the user database if the username is availible
+# Returns an error message to display if there was an issue or an empty string otherwise
 def signup(username, password):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
-
     c = db.cursor()
 
-    ##dbseteup()
 
     c.execute("""SELECT Username FROM Users WHERE Username=?""",[username])
     result = c.fetchone()
@@ -117,11 +126,14 @@ def signup(username, password):
 
     else:
         c.execute('INSERT INTO Users VALUES (null, ?, ?)', (username, password))
+
         db.commit()
         db.close()
+
+        # Uses empty quotes since it will return false when checked as a boolean
         return  ""
 
-
+# Tries to check if the username and password are valid
 def login(username, password):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
 
@@ -132,12 +144,13 @@ def login(username, password):
 
     if result:
         ##access this specifc user data
-        return(False)
+        return False
 
     else:
-        return(True)
+        return True
 
 
+# Creates a new story under a user
 def new_story(title, story, username):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
@@ -146,16 +159,14 @@ def new_story(title, story, username):
 
     c.execute("SELECT ID FROM Stories WHERE Title=? AND Latest_Update=? AND FullStory=?", [title, story, story])
     story_id = c.fetchone()[0]
-
-    c.execute("SELECT ID FROM Users WHERE Username=?", [username])
-    user_id = c.fetchone()[0]
+    user_id = get_id(username)
 
     c.execute('INSERT INTO Contributions VALUES (null, ?, ?, ?)', (user_id, story_id, story))
 
     db.commit()
     db.close()
 
-
+# Adds another contribution to a story
 def edit_story(story_id, story, new_update, username):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
@@ -169,6 +180,7 @@ def edit_story(story_id, story, new_update, username):
     db.commit()
     db.close()
 
+# Returns all the relevant information regarding a story
 def get_story(story_id):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
@@ -187,6 +199,7 @@ def get_story(story_id):
 
     return title, full_story, latest_update
 
+# Gets the title of a story given a story_id
 def get_story_title_by_id(story_id):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
@@ -199,7 +212,7 @@ def get_story_title_by_id(story_id):
 
     return title
 
-# gets the user I
+# gets the user
 def get_id(username):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
