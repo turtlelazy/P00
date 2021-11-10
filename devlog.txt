@@ -122,3 +122,7 @@ oscarW -- 2021-11-9 14:28
 
 owenY -- 2021-11-9 14:45
 - finished edit confirmation page
+
+lucasL -- 2021-11-10 08:30
+- got search bar working
+- started to add comments to db_builder
