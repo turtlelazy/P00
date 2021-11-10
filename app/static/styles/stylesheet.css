@@ -1,3 +1,7 @@
+body {
+    background-color: #f5f5f5;
+}
+
 ul.nav {
     list-style-type: none;
     margin: 0;
@@ -31,7 +35,7 @@ ul.story {
 
 li.story {
     border: 1px solid black;
-    padding: 10px 0.5px;
+    padding: 10px 0px;
     float: none;
     background-color: azure;
     margin-top: 10px;
@@ -82,4 +86,9 @@ div.story {
 
 .newstory:hover {
     background-color: moccasin;
+}
+
+.auth {
+    margin-top: 25vh;
+    margin-bottom: 25vh;
 }
