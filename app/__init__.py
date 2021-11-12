@@ -157,20 +157,24 @@ def edit_story(story_id):
         # gets information on the story from the db
         title, story, previous_update = db_builder.get_story(story_id)
 
-        # Get the latest update and append it along with two newlines
-        # Newlines are for easy formatting when viewing the story
-        latest_update = request.form["contribution"]
-        story += "\n\n" + latest_update
 
         # Check if it was a confirm post or just from the main edit page
+        latest_update = request.form["contribution"]
         confirm = request.form['submit']
+
         if confirm == "Confirm":
+
+            # Get the latest update and append it along with two newlines
+            # Newlines are for easy formatting when viewing the story
+
+            story += "\n\n" + latest_update
 
             # submits the edit to the db
             db_builder.edit_story(story_id, story, latest_update, username)
             return redirect(url_for('landing'))
 
         # Generate error message
+        print(not latest_update)
         error_message = ""
         if not latest_update:
             error_message = "You cannot have an empty update."
@@ -183,7 +187,8 @@ def edit_story(story_id):
                 'edit.html',
                 title=title,
                 latest_update=latest_update,
-                story_id=story_id
+                story_id=story_id,
+                message=error_message
             )
 
         else:
