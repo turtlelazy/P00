@@ -14,7 +14,7 @@ def dbseteup():
     c.execute(command)
 
     c.execute("DROP TABLE IF EXISTS Stories")
-    command = "CREATE TABLE Stories (ID INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, FullStory TEXT, Latest_Update TEXT)"
+    command = "CREATE TABLE Stories (ID INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, FullStory TEXT, LatestUpdate TEXT)"
     c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
     # run SQL statement
 
@@ -113,7 +113,7 @@ def new_story(title, story, username):
     c.execute('INSERT INTO Stories VALUES (null, ?, ?, ?)', (title, story, story))
 
     # Gets relevant story and user ids
-    c.execute("SELECT ID FROM Stories WHERE Title=? AND Latest_Update=? AND FullStory=?", [title, story, story])
+    c.execute("SELECT ID FROM Stories WHERE Title=? AND LatestUpdate=? AND FullStory=?", [title, story, story])
     story_id = c.fetchone()[0]
     user_id = get_id(username)
 
@@ -129,7 +129,7 @@ def edit_story(story_id, story, new_update, username):
     c = db.cursor()
 
     # Modofies the stories fullstory and the latestupdate
-    c.execute('UPDATE Stories SET FullStory=?, Latest_Update=? WHERE ID=?', [story, new_update, story_id])
+    c.execute('UPDATE Stories SET FullStory=?, LatestUpdate=? WHERE ID=?', [story, new_update, story_id])
 
     # Inserts another contribution into contribution database
     user_id = get_id(username)
@@ -144,7 +144,7 @@ def get_story(story_id):
     c = db.cursor()
 
     # Retrieves all relevant information given a story_id
-    c.execute("SELECT Title, FullStory, Latest_Update FROM Stories WHERE ID=?", [story_id])
+    c.execute("SELECT Title, FullStory, LatestUpdate FROM Stories WHERE ID=?", [story_id])
     row = c.fetchone()
 
     title = row[0]
