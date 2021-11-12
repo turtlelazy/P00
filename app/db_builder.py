@@ -182,3 +182,12 @@ def get_id(username):
         user_ID = row[0]
 
     return user_ID
+
+def check_story(story_id):
+    db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
+    c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
+
+    c.execute("SELECT * FROM Stories WHERE ID=?", [story_id])
+    row = c.fetchone()
+
+    return row is not None

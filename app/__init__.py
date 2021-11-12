@@ -128,7 +128,7 @@ def logout():
 @app.route('/<int:story_id>/edit', methods=['GET', 'POST'])
 def edit_story(story_id):
 
-    if not logged_in():
+    if not logged_in() or not db_builder.check_story(story_id):
         # If not logged in, redirect to the main page
         return redirect(url_for('landing'))
 
@@ -203,7 +203,7 @@ def edit_story(story_id):
 @app.route('/<int:story_id>')
 def view_story(story_id):
 
-    if logged_in():
+    if logged_in() and db_builder.check_story(story_id):
 
         username = session['username']
 
