@@ -1,10 +1,3 @@
-'''
-Forgotten Charger: Lewis Cass, Aryaman Goenka, Oscar Wang, Owen Yaggy
-Softdev
-P00: Cookie and Sessions Introduction
-2021-10-29
-time spent: 0.5
-'''
 import sqlite3
 import db_builder
 from flask import Flask, render_template, request, session, redirect, url_for
@@ -21,15 +14,17 @@ def landing():
     # Check for session existance
     if logged_in():
 
+        # Retrieve list of viewable and edtiable stories
         username = session['username']
-
-
         viewable_stories, editable_stories = db_builder.split_viewable_stories(username)
 
+        # Get filter if there is a post request from the search bar
         filter=""
         if request.method == "POST":
             filter = request.form["search"]
 
+            # Filters out the viewable and edtiable stories based on the search bar entry
+            # Checks if the filter is a case-insensitive substring of the title
             viewable_stories = [(id, title) for id, title in viewable_stories if filter.lower() in title.lower()]
             editable_stories = [(id, title) for id, title in editable_stories if filter.lower() in title.lower()]
 
@@ -44,11 +39,12 @@ def landing():
 def login():
     method = request.method
 
-    # Check for session existance
+    # Handle regular viewing of the login page
     if method == 'GET':
 
         if logged_in():
 
+            # Redirect to the main page if they are logged in
             return redirect(url_for('landing'))
         else:
             # If not logged in, show login page
@@ -59,13 +55,16 @@ def login():
         # Get information from request.form since it is submitted via post
         username = request.form['username']
         password = request.form['password']
+
+        # Get response from the database
         error = db_builder.login(username, password)
 
         if error:
             # If incorrect, give feedback to the user
             return render_template('login.html', error=error)
         else:
-            # Store user info into a cookie
+
+            # Store user info into a cookie and return to main page
             session['username'] = username
             return redirect(url_for('landing'))
 
@@ -73,20 +72,23 @@ def login():
 def register():
     method = request.method
 
-    # Check for session existence
+
     if method == "GET":
         if logged_in():
-
+            # If logged in, redirect to main page
             return redirect(url_for('landing'))
         else:
             # If not logged in, show regsiter page
             return render_template('register.html', error_message="")
 
     if method == "POST":
+
+        # Get information from the form
         new_username = request.form["new_username"]
         new_password = request.form["new_password"]
         confirm_password = request.form["confirm_password"]
 
+        # Generate error message
         error_message = ""
         if not new_username:
             error_message = "Error: No username entered!"
@@ -95,14 +97,19 @@ def register():
         elif confirm_password != new_password:
             error_message = "Error: Passwords do not match!"
 
+        # Empty quote will return false
         if error_message:
             return render_template("register.html", error_message=error_message)
 
+        # Check once again against the database
         error_message = db_builder.signup(new_username, new_password)
 
+        # Empty quotes from the database method will return false
         if error_message:
             return render_template("register.html", error_message=error_message)
         else:
+
+            # Start a session and redirect to the main page
             session['username'] = new_username
             return redirect(url_for('landing'))
 
@@ -120,66 +127,68 @@ def logout():
 # For editing a particular story
 @app.route('/<int:story_id>/edit', methods=['GET', 'POST'])
 def edit_story(story_id):
+
+    if not logged_in():
+        # If not logged in, redirect to the main page
+        return redirect(url_for('landing'))
+
+
     method = request.method
+    username = session['username']
+
+    # Can only edit story that was not contributed to
+    if db_builder.has_contributed(story_id, username):
+
+        # Have the user view the full story instead
+        return redirect(url_for('view_story', story_id=story_id))
+
 
     if method == "GET":
 
-        if logged_in():
+        # Get all information about a story to edit
+        title, story, latest_update = db_builder.get_story(story_id)
 
-            username = session['username']
-
-            if db_builder.has_contributed(story_id, username):
-
-                # Can only edit story that was not contributed to
-
-                return redirect(url_for('view_story', story_id=story_id))
-            else:
-                title, story, latest_update = db_builder.get_story(story_id)
-
-                return render_template('edit.html', story_id=story_id, title=title, latest=latest_update)
-
-        else:
-            return redirect(url_for('landing'))
+        return render_template('edit.html', story_id=story_id, title=title, latest=latest_update)
 
     # submitting the edit
-    if method == "POST":
+    elif method == "POST":
 
-        if logged_in():
 
-            username = session['username']
-            if db_builder.has_contributed(story_id, username):
-                print("User has contributed to this story.")
+        # gets information on the story from the db
+        title, story, previous_update = db_builder.get_story(story_id)
 
-                # Can only edit story that was not contributed to
+        # Get the latest update and append it along with two newlines
+        # Newlines are for easy formatting when viewing the story
+        latest_update = request.form["contribution"]
+        story += "\n\n" + latest_update
 
-                return redirect(url_for('view_story', story_id=story_id))
+        # Check if it was a confirm post or just from the main edit page
+        confirm = request.form['submit']
+        if confirm == "Confirm":
 
-            # gets information on the story from the db
-            title, story, previous_update = db_builder.get_story(story_id)
+            # submits the edit to the db
+            db_builder.edit_story(story_id, story, latest_update, username)
+            return redirect(url_for('landing'))
 
-            latest_update = request.form["contribution"]
-            story += "\n\n" + latest_update
+        # Generate error message
+        error_message = ""
+        if not latest_update:
+            error_message = "You cannot have an empty update."
 
-            confirm = request.form['submit']
+        # Empty quotes will return false
+        if error_message:
 
-            if confirm == "Confirm":
-                # submits the edit to the db
-                db_builder.edit_story(story_id, story, latest_update, username)
+            # Give feedback to the user
+            return render_template(
+                'edit.html',
+                title=title,
+                latest_update=latest_update,
+                story_id=story_id
+            )
 
-                return redirect(url_for('landing'))
+        else:
 
-            error_message = ""
-            if not latest_update:
-                error_message = "You cannot have an empty update."
-
-            print(error_message)
-            if error_message:
-                return render_template(
-                    'edit.html',
-                    title=title,
-                    latest_update=latest_update,
-                    story_id=story_id
-                )
+            # Show them a confirmation page
             return render_template(
                 'confirm_edit.html',
                 title=title,
@@ -188,9 +197,6 @@ def edit_story(story_id):
                 story_id=story_id
             )
 
-
-        else:
-            return redirect(url_for('landing'))
 
 
 # For viewing a particular story
@@ -201,14 +207,20 @@ def view_story(story_id):
 
         username = session['username']
 
+        # Can only view a story that the user has contributed to
         if db_builder.has_contributed(story_id, username):
 
+            # Get relevant information about a story
             title, story, _ = db_builder.get_story(story_id)
-            print(story)
             return render_template('view.html', title=title, story=story)
+
         else:
+
+            # Have them contribute to the story first
             return redirect(url_for('edit_story', story_id=story_id))
     else:
+
+        # If not logged in redirect to main page
         return redirect(url_for('landing'))
 
 
@@ -234,28 +246,35 @@ def add_story():
             db_builder.new_story(title, story, session['username'])
 
             return redirect(url_for('landing'))
-
+        # Generate error message
         error_message = ""
         if not title:
             error_message = "Please give your story a title."
         elif not story:
             error_message = "You cannot have an empty story."
 
-        print(error_message)
+        # Empty quotes will return false
         if error_message:
+
+            # Give feedback to the user
             return render_template(
                 'new.html',
                 title = title,
                 story = story,
                 message = error_message
             )
-        return render_template(
-            'confirm_add.html',
-            title = title,
-            story = story
-        )
+
+        else:
+
+            # Show user a confirmation page
+            return render_template(
+                'confirm_add.html',
+                title = title,
+                story = story
+            )
 
 # Handles when a user visits a page without a route
+# Ensures app will not crash
 @app.errorhandler(404)
 def not_found(e):
     return render_template('404.html'), 404

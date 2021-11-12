@@ -1,25 +1,17 @@
-'''
-Forgotten Charger: Lewis Cass, Aryaman Goenka, Oscar Wang, Owen Yaggy
-Softdev
-P00: Cookie and Sessions Introduction
-2021-10-29
-time spent: 0.5
-'''
-
 import sqlite3   #enable control of an sqlite database
 import csv       #facilitate CSV I/O
 import werkzeug.security
 
 DB_FILE="StoryCharger.db"
 
+# Drops each table and resets them
 def dbseteup():
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
-    c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
+    c = db.cursor()
 
     c.execute("DROP TABLE IF EXISTS Users")
     command = "CREATE TABLE Users (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username TEXT, Password TEXT)"
-    c.execute(command)      # test SQL stmt in sqlite3 shell, save as string
-    # run SQL statement
+    c.execute(command)
 
     c.execute("DROP TABLE IF EXISTS Stories")
     command = "CREATE TABLE Stories (ID INTEGER PRIMARY KEY AUTOINCREMENT, Title TEXT, FullStory TEXT, Latest_Update TEXT)"
@@ -62,45 +54,6 @@ def split_viewable_stories(username):
     return (viewable_story_list, editable_story_list)
 
 
-# def get_viewable_stories(username):
-#     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
-#     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
-#
-#     user_id = get_id(username)
-#     c.execute("SELECT StoryID FROM Contributions WHERE UserID=?", [user_id])
-#
-#     story_id_list = [entry[0] for entry in c.fetchall()]
-#     story_id_set = set(story_id_list)
-#
-#     story_list = []
-#     for story_id in story_id_set:
-#         story_list.append((story_id, get_story_title_by_id(story_id)))
-#
-#     db.commit() #save changes
-#     db.close()  #close database
-#
-#     return story_list
-#
-# # returns a list of story IDs for the stories the user has not contributed to
-# def get_editable_stories(username):
-#     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
-#     c = db.cursor()               #facilitate db ops -- you will use cursor to trigger db events
-#
-#     user_id = get_id(username)
-#     c.execute("SELECT StoryID FROM Contributions WHERE UserID!=?", [user_id])
-#
-#     story_id_list = [entry[0] for entry in c.fetchall()]
-#     story_id_set = set(story_id_list)
-#
-#     story_list = []
-#     for story_id in story_id_set:
-#         story_list.append((story_id, get_story_title_by_id(story_id)))
-#
-#     db.commit() #save changes
-#     db.close()  #close database
-#
-#     return story_list
-
 # returns True if the user has contributed to the story and False otherwise
 def has_contributed(story_id, username):
     contributions, _ = split_viewable_stories(username)
@@ -118,7 +71,7 @@ def signup(username, password):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
     c = db.cursor()
 
-
+    # Checks if username already exists
     c.execute("""SELECT Username FROM Users WHERE Username=?""",[username])
     result = c.fetchone()
 
@@ -137,9 +90,9 @@ def signup(username, password):
 # Tries to check if the username and password are valid
 def login(username, password):
     db = sqlite3.connect(DB_FILE) #open if file exists, otherwise create
-
     c = db.cursor()
 
+    # Checks if username and password combination exists
     c.execute("""SELECT Username FROM Users WHERE Username=? AND Password=?""",[username, password])
     result = c.fetchone()
 
@@ -156,12 +109,15 @@ def new_story(title, story, username):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
 
+    # Adds an entry into the Story database
     c.execute('INSERT INTO Stories VALUES (null, ?, ?, ?)', (title, story, story))
 
+    # Gets relevant story and user ids
     c.execute("SELECT ID FROM Stories WHERE Title=? AND Latest_Update=? AND FullStory=?", [title, story, story])
     story_id = c.fetchone()[0]
     user_id = get_id(username)
 
+    # Records contribution into contribution database
     c.execute('INSERT INTO Contributions VALUES (null, ?, ?, ?)', (user_id, story_id, story))
 
     db.commit()
@@ -172,9 +128,10 @@ def edit_story(story_id, story, new_update, username):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
 
+    # Modofies the stories fullstory and the latestupdate
     c.execute('UPDATE Stories SET FullStory=?, Latest_Update=? WHERE ID=?', [story, new_update, story_id])
 
-
+    # Inserts another contribution into contribution database
     user_id = get_id(username)
     c.execute('INSERT INTO Contributions VALUES (null, ?, ?, ?)', (user_id, story_id, new_update))
 
@@ -186,8 +143,8 @@ def get_story(story_id):
     db = sqlite3.connect(DB_FILE)  # open if file exists, otherwise create
     c = db.cursor()
 
+    # Retrieves all relevant information given a story_id
     c.execute("SELECT Title, FullStory, Latest_Update FROM Stories WHERE ID=?", [story_id])
-
     row = c.fetchone()
 
     title = row[0]

@@ -136,3 +136,8 @@ oscarW -- 2021-11-10 9:00
 - put add to stories and view stories side by side
 - fixed text overflow issues in view and edit pages
 - search bar now has placeholder text
+
+lucasL -- 2021-11-11 19:00
+- added comments to both db_builder and __init__
+- refactored code for clarity and prevent redundancy in __init__
+- added our team flag
