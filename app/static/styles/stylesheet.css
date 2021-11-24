@@ -1,94 +1,66 @@
-body {
-    background-color: #f5f5f5;
+body{
+    background-color: lightblue;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 ul.nav {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
+    background-color: rgba(214, 123, 210, 0.767);
+
 }
 
 li.nav {
-    float: left;
+    
 }
 
 li a.nav{
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
+    color: lightgray;
+    float: left;
 }
 
 li a.nav:hover {
-    background-color: #111;
 }
 
 ul.story {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+
 }
 
 li.story {
-    border: 1px solid black;
-    padding: 10px 0px;
-    float: none;
-    background-color: azure;
-    margin-top: 10px;
-    width: 250px;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
+
 }
 
 li a.story {
-    padding: 14px 16px;
-    color: black;
-    text-decoration: none;
-    size: fit-content;
+
 }
 
 li.story:hover {
-    background-color: aquamarine;
 }
 
 li.search {
-    float:right;
-    margin-right: 10px;
+
 }
 input.search {
-    padding: 2px 3px;
-    text-decoration: none;
-    margin-top: 12px;
+
 }
 
 div.story {
-    float:left;
 }
 
 .story-text {
-    overflow-wrap: break-word;
-    word-wrap: break-word;
+
 }
 
 .newstory {
-    color: black;
-    text-decoration: none;
-    size: fit-content;
-    border: 1px solid black;
-    border-radius: 80%;
-    padding: 20px;
-    background-color: bisque;
+
 }
 
 .newstory:hover {
-    background-color: moccasin;
 }
 
 .auth {
-    margin-top: 25vh;
-    margin-bottom: 25vh;
+
+}
+
+h1{
+    color:darkblue
+
 }
