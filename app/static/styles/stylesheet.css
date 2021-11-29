@@ -31,15 +31,11 @@ li a.nav:hover {
 
 .header {
   height: 400px;
-  /* background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRI7WfT_SfRfsBj4A_u7DMJaARHQVB43DMhnw&usqp=CAU"); */
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://wc.wallpaperuse.com/wallp/22-220672_s.jpg");
-  /* https://wc.wallpaperuse.com/wallp/22-220672_s.jpg */
-  /* background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRI7WfT_SfRfsBj4A_u7DMJaARHQVB43DMhnw&usqp=CAU"); */
   background-size: cover;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  /* background-color: pink; */
 }
 
 .header-text{
