@@ -1,27 +1,58 @@
 body{
-    background-color: lightblue;
-    font-family: Arial, Helvetica, sans-serif;
+    /* background-color: lightblue;
+    font-family: Arial, Helvetica, sans-serif; */
+    font-family: "Lucida Console", monospace;
+    background-color: lightgray;
 }
 
 ul.nav {
-    background-color: rgba(214, 123, 210, 0.767);
-
+    list-style-type: none;
+    overflow: auto; /* specify overflow since float */
+    margin: 0;
+    padding: 0;
+    background-color: black;
 }
 
 li.nav {
-    
+  float: left; /* block elements float next to each other */
 }
 
 li a.nav{
+    display: block; /* each text is a block; with its own height, width... */
     color: lightgray;
-    float: left;
+    text-align: center;
+    padding: 8px;
+    text-decoration: none;
 }
 
 li a.nav:hover {
+  background-color: gray;
+}
+
+.header {
+  height: 400px;
+  /* background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRI7WfT_SfRfsBj4A_u7DMJaARHQVB43DMhnw&usqp=CAU"); */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://wc.wallpaperuse.com/wallp/22-220672_s.jpg");
+  /* https://wc.wallpaperuse.com/wallp/22-220672_s.jpg */
+  /* background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRI7WfT_SfRfsBj4A_u7DMJaARHQVB43DMhnw&usqp=CAU"); */
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  /* background-color: pink; */
+}
+
+.header-text{
+  text-align: center;
+  padding: 150px;
+  color: white;
 }
 
 ul.story {
-
+  list-style-type: none;
+  background-color: darkgray;
+  margin: 0;
+  padding: 0;
 }
 
 li.story {
@@ -29,20 +60,27 @@ li.story {
 }
 
 li a.story {
-
+  display: block;
+  padding: 8px;
+  color: black;
+  text-align: center;
+  text-decoration: none;
 }
 
 li.story:hover {
+  background-color: white;
 }
 
 li.search {
-
+  padding: 8px;
+  float: right;
 }
 input.search {
 
 }
 
 div.story {
+
 }
 
 .story-text {
@@ -60,7 +98,13 @@ div.story {
 
 }
 
-h1{
-    color:darkblue
 
+h1{
+    /* color:darkblue; */
+    /* margin: auto */
+
+}
+
+h2{
+  text-align: center;
 }
