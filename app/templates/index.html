@@ -17,11 +17,17 @@
     </head>
 
     <body>
-        <h1>Hello {{username}}!</h1>
+        <div class="header">
+          <div class="header-text">
+            <h1>Hello {{username}}!</h1>
+          </div>
+        </div>
+
         <h2><a class="newstory" href="/new">New Story</a></h2>
-        <div class="story" style="padding-right: 50px;">
+        <!-- <div class="story" style="padding-right: 50px;"> -->
+        <div class="story">
             <h2>Add to Stories</h2>
-            <ul class="story">                    
+            <ul class="story">
                 {%for id, title in edtiable%}
                     <li class="story"><a class="story" href="/{{id}}/edit">{{title}}</a></li>
                 {%endfor%}
